@@ -1,31 +1,35 @@
+import AppBackground from "@/components/AppBackground";
 import BackBtn from "@/components/BackBtn";
 import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 export default function LoginScreen() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  return (
-    <View className="flex-1 bg-secondary">
-      <LinearGradient
-        colors={["#1F2E54", "#0B0E14", "#0B0E14"]}
-        start={{ x: 1, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      />
+  const handleSubmit = async () => {
+    if (!email || !password) {
+      Toast.show({
+        type: "error",
+        text2: "Please fill in all fields to continue",
+        position: "top",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+      return;
+    }
 
+    router.push("/(tabs)/dashboard");
+  };
+
+  return (
+    <AppBackground>
       <SafeAreaView className="flex-1">
         <View className="flex-1 px-6 justify-between pt-4 pb-8">
           <View>
@@ -36,7 +40,7 @@ export default function LoginScreen() {
               <Text className="text-white text-[32px] font-bold tracking-tight">
                 Welcome Back
               </Text>
-              <Text className="text-[#828282] text-sm mt-1">
+              <Text className="text-gray-300 text-sm mt-1">
                 Log in to your account to monitor your expenses
               </Text>
             </View>
@@ -44,12 +48,12 @@ export default function LoginScreen() {
             {/* FORM INPUTS SECTION */}
             <View className="mt-10 space-y-4">
               {/* EMAIL INPUT */}
-              <View className="flex-row items-center bg-white/5 border border-white/10 rounded-2xl px-4 py-3.5 mb-4">
-                <Feather name="at-sign" size={18} color="#828282" />
+              <View className="flex-row items-center bg-white/20 border border-white/10 rounded-2xl px-4 py-3.5 mb-4">
+                <Feather name="at-sign" size={18} color="#ccc" />
                 <TextInput
                   className="flex-1 text-white ml-3 text-base"
                   placeholder="Enter your email"
-                  placeholderTextColor="#555555"
+                  placeholderTextColor="#ccc"
                   keyboardType="email-address"
                   autoCapitalize="none"
                   value={email}
@@ -58,12 +62,12 @@ export default function LoginScreen() {
               </View>
 
               {/* PASSWORD INPUT */}
-              <View className="flex-row items-center bg-white/5 border border-white/10 rounded-2xl px-4 py-3.5">
-                <Feather name="lock" size={18} color="#828282" />
+              <View className="flex-row items-center bg-white/20 border border-white/10 rounded-2xl px-4 py-3.5">
+                <Feather name="lock" size={18} color="#ccc" />
                 <TextInput
                   className="flex-1 text-white ml-3 text-base"
                   placeholder="Enter your password"
-                  placeholderTextColor="#555555"
+                  placeholderTextColor="#ccc"
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
                   value={password}
@@ -75,7 +79,7 @@ export default function LoginScreen() {
                   <Feather
                     name={showPassword ? "eye" : "eye-off"}
                     size={18}
-                    color="#828282"
+                    color="#ccc"
                   />
                 </TouchableOpacity>
               </View>
@@ -100,13 +104,14 @@ export default function LoginScreen() {
                 shadowOpacity: 0.3,
                 shadowRadius: 12,
               }}
+              onPress={handleSubmit}
             >
               <Text className="text-white text-lg font-bold">Log In</Text>
             </TouchableOpacity>
 
             {/* REDIRECT TO SIGN UP */}
             <View className="flex-row justify-center items-center mt-4">
-              <Text className="text-[#828282] text-sm">
+              <Text className="text-gray-300 text-sm">
                 Don't have an account?{" "}
               </Text>
               <Link href="/signup">
@@ -116,6 +121,6 @@ export default function LoginScreen() {
           </View>
         </View>
       </SafeAreaView>
-    </View>
+    </AppBackground>
   );
 }

@@ -1,6 +1,6 @@
+import AppBackground from "@/components/AppBackground";
 import BackBtn from "@/components/BackBtn";
 import { Feather } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -14,20 +14,7 @@ export default function SignupScreen() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <View className="flex-1 bg-secondary">
-      <LinearGradient
-        colors={["#1F2E54", "#0B0E14", "#0B0E14"]}
-        start={{ x: 1, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      />
-
+    <AppBackground>
       <SafeAreaView className="flex-1">
         <View className="flex-1 px-6 justify-between pt-4 pb-8">
           <View>
@@ -148,6 +135,6 @@ export default function SignupScreen() {
           </View>
         </View>
       </SafeAreaView>
-    </View>
+    </AppBackground>
   );
 }
