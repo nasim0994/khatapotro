@@ -11,7 +11,23 @@ export default function Dashboard() {
   const { loggedUser } = useAppSelector((state: any) => state.auth);
   const [greeting, setGreeting] = useState("Hello");
 
-  const { data } = useGetAllTransactionQuery({ user: loggedUser?._id });
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const currentYearMonth = `${year} ${month}`;
+
+  const [yearNumber, monthNumber] = currentYearMonth.split(" ").map(Number);
+  const startDateObj = new Date(Date.UTC(yearNumber, monthNumber - 1, 1));
+  const endDateObj = new Date(Date.UTC(yearNumber, monthNumber, 0));
+
+  const startDate = startDateObj.toISOString();
+  const endDate = endDateObj.toISOString();
+
+  const { data } = useGetAllTransactionQuery({
+    user: loggedUser?._id,
+    startDate,
+    endDate,
+  });
   const transactions = data?.data || [];
 
   useEffect(() => {
@@ -51,7 +67,9 @@ export default function Dashboard() {
             <DashboardCard />
 
             {/* transactions */}
-            <TransactionsList transactions={transactions} />
+            {transactions?.length > 0 && (
+              <TransactionsList transactions={transactions} />
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>

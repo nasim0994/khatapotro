@@ -64,12 +64,11 @@ export default function AllTransactions() {
 
   const [yearNumber, monthNumber] = selectedMonth.split(" ").map(Number);
 
-  const format = (date: Date) => {
-    return date.toLocaleDateString("en-CA");
-  };
+  const startDateObj = new Date(Date.UTC(yearNumber, monthNumber - 1, 1));
+  const endDateObj = new Date(Date.UTC(yearNumber, monthNumber, 0));
 
-  const startDate = new Date(Date.UTC(yearNumber, monthNumber - 1, 1));
-  const endDate = new Date(Date.UTC(yearNumber, monthNumber, 0));
+  const startDate = startDateObj.toISOString();
+  const endDate = endDateObj.toISOString();
 
   const { data: transactionData } = useGetAllTransactionQuery({
     user: loggedUser?._id,
@@ -177,13 +176,30 @@ export default function AllTransactions() {
         </View>
 
         {/* ট্রানজেকশন লিস্ট এরিয়া */}
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 20 }}
-        >
-          <Text style={styles.sectionLabel}>History Log</Text>
-          <TransactionsList transactions={transactions} />
-        </ScrollView>
+        {transactions?.length >= 0 ? (
+          <View style={styles.emptyContainer}>
+            <View style={styles.emptyIconWrapper}>
+              <Feather
+                name="file-text"
+                size={32}
+                color="rgba(255, 255, 255, 0.25)"
+              />
+            </View>
+            <Text style={styles.emptyTitle}>No Transactions Yet</Text>
+            <Text style={styles.emptySubtitle}>
+              Your history log is empty. Tap on a category above to log your
+              first transaction!
+            </Text>
+          </View>
+        ) : (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 20 }}
+          >
+            <Text style={styles.sectionLabel}>History Log</Text>
+            <TransactionsList transactions={transactions} />
+          </ScrollView>
+        )}
 
         {/* ==================== DYNAMIC MONTH PICKER MODAL ==================== */}
         <Modal
@@ -505,5 +521,43 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
     marginBottom: 10,
+  },
+
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 28,
+  },
+  emptyIconWrapper: {
+    width: 74,
+    height: 74,
+    borderRadius: 24,
+    backgroundColor: "rgba(255, 255, 255, 0.03)",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.06)",
+    marginBottom: 16,
+    // হালকা গ্লো ইফেক্ট (iOS ও Android এর জন্য)
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  emptyTitle: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "700",
+    marginBottom: 6,
+    letterSpacing: 0.3,
+  },
+  emptySubtitle: {
+    color: "rgba(255, 255, 255, 0.4)",
+    fontSize: 13,
+    fontWeight: "400",
+    textAlign: "center",
+    lineHeight: 18,
   },
 });
