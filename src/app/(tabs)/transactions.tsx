@@ -1,5 +1,10 @@
 import AppBackground from "@/components/AppBackground";
-import { Entypo, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import TransactionsList from "@/components/modules/dashboard/TransactionsList";
+import { useGetAllCategoryQuery } from "@/redux/features/categoryApi";
+import { useAppSelector } from "@/redux/hooks";
+import { TCategory } from "@/types/categoryTypes";
+import { renderIcon } from "@/utils/renderIcon";
+import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import {
   Keyboard,
@@ -17,52 +22,9 @@ import {
 import DatePicker from "react-native-modern-datepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const DATABASE_CATEGORIES = [
-  {
-    _id: "cat_1",
-    name: "Food & Dining",
-    iconName: "food-fork-drink",
-    iconFamily: "MaterialCommunityIcons",
-  },
-  {
-    _id: "cat_2",
-    name: "Shopping",
-    iconName: "shopping-bag",
-    iconFamily: "Feather",
-  },
-  {
-    _id: "cat_3",
-    name: "Transport & Fuel",
-    iconName: "car",
-    iconFamily: "MaterialCommunityIcons",
-  },
-  {
-    _id: "cat_4",
-    name: "Electricity Bill",
-    iconName: "zap",
-    iconFamily: "Feather",
-  },
-  {
-    _id: "cat_5",
-    name: "Salary Income",
-    iconName: "wallet",
-    iconFamily: "Entypo",
-  },
-  {
-    _id: "cat_6",
-    name: "Freelance",
-    iconName: "code",
-    iconFamily: "Feather",
-  },
-  {
-    _id: "cat_7",
-    name: "Medical & Pills",
-    iconName: "pill",
-    iconFamily: "MaterialCommunityIcons",
-  },
-];
+export default function AllTransactions() {
+  const { loggedUser } = useAppSelector((state: any) => state.auth);
 
-export default function Transactions() {
   const [activeTab, setActiveTab] = useState<"all" | "income" | "expense">(
     "all",
   );
@@ -82,7 +44,10 @@ export default function Transactions() {
   const [categoryModalVisible, setCategoryModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredCategories = DATABASE_CATEGORIES.filter((cat) =>
+  const { data } = useGetAllCategoryQuery({ user: loggedUser?._id });
+  const categories = data?.data || [];
+
+  const filteredCategories = categories?.filter((cat: TCategory) =>
     cat.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
@@ -91,28 +56,6 @@ export default function Transactions() {
     const [year, month] = dateString.split(" ");
     const date = new Date(parseInt(year), parseInt(month) - 1);
     return date.toLocaleString("en-US", { month: "long", year: "numeric" });
-  };
-
-  const CategoryIcon = ({
-    name,
-    family,
-    size = 18,
-    color = "#D1D5DB",
-  }: {
-    name: string;
-    family: string;
-    size?: number;
-    color?: string;
-  }) => {
-    if (family === "Feather") {
-      return <Feather name={name as any} size={size} color={color} />;
-    }
-    if (family === "Entypo") {
-      return <Entypo name={name as any} size={size} color={color} />;
-    }
-    return (
-      <MaterialCommunityIcons name={name as any} size={size} color={color} />
-    );
   };
 
   return (
@@ -217,17 +160,7 @@ export default function Transactions() {
           contentContainerStyle={{ paddingBottom: 20 }}
         >
           <Text style={styles.sectionLabel}>History Log</Text>
-          <View style={styles.placeholderContainer}>
-            <Text
-              style={{
-                color: "rgba(255,255,255,0.3)",
-                fontSize: 13,
-                textAlign: "center",
-              }}
-            >
-              Transaction List Component টি এখানে বসবে।
-            </Text>
-          </View>
+          <TransactionsList />
         </ScrollView>
 
         {/* ==================== DYNAMIC MONTH PICKER MODAL ==================== */}
@@ -356,11 +289,11 @@ export default function Transactions() {
                     </Text>
                   </View>
                   {!selectedCategory && (
-                    <Feather name="check" size={16} color="#34C759" />
+                    <Feather name="check" size={16} color="#2F80ED" />
                   )}
                 </TouchableOpacity>
 
-                {filteredCategories.map((category) => {
+                {filteredCategories?.map((category: TCategory) => {
                   const isSelected = selectedCategory?._id === category._id;
                   return (
                     <TouchableOpacity
@@ -378,12 +311,12 @@ export default function Transactions() {
                     >
                       <View style={styles.infoLeft}>
                         <View style={styles.listIconWrapper}>
-                          <CategoryIcon
-                            name={category.iconName}
-                            family={category.iconFamily}
-                            size={18}
-                            color={isSelected ? "#34C759" : "#D1D5DB"}
-                          />
+                          {renderIcon({
+                            family: category?.icon?.family,
+                            name: category?.icon?.name,
+                            size: 20,
+                            color: category?.icon?.color,
+                          })}
                         </View>
                         <Text
                           style={[
@@ -395,7 +328,7 @@ export default function Transactions() {
                         </Text>
                       </View>
                       {isSelected && (
-                        <Feather name="check" size={16} color="#34C759" />
+                        <Feather name="check" size={16} color="#2F80ED" />
                       )}
                     </TouchableOpacity>
                   );

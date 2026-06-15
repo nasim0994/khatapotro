@@ -1,121 +1,89 @@
 import { useGetAllTransactionQuery } from "@/redux/features/transactionApi";
-import { Feather } from "@expo/vector-icons";
+import { useAppSelector } from "@/redux/hooks";
+import { TCategory } from "@/types/categoryTypes";
+import { TTransaction } from "@/types/transactionType";
+import { renderIcon } from "@/utils/renderIcon";
+import { useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const TRANSACTION_DATA = [
-  {
-    date: "14-06-2026",
-    data: [
-      {
-        id: "t1",
-        user: "Rakib",
-        type: "expense",
-        category: "Food",
-        date: "14-06-2026",
-        amount: 250,
-        note: "Lunch with team",
-        time: "1:15 PM",
-      },
-      {
-        id: "t2",
-        user: "Rakib",
-        type: "income",
-        category: "Freelance",
-        date: "14-06-2026",
-        amount: 5000,
-        note: "UI Design Project Milestone",
-        time: "11:00 AM",
-      },
-      {
-        id: "t3",
-        user: "Rakib",
-        type: "expense",
-        category: "Transport",
-        date: "14-06-2026",
-        amount: 120,
-        note: "Uber ride to office",
-        time: "9:30 AM",
-      },
-    ],
-  },
-  {
-    date: "13-06-2026",
-    data: [
-      {
-        id: "t4",
-        user: "Rakib",
-        type: "expense",
-        category: "Utilities",
-        date: "13-06-2026",
-        amount: 1500,
-        note: "Internet bill payment",
-        time: "6:45 PM",
-      },
-      {
-        id: "t5",
-        user: "Rakib",
-        type: "expense",
-        category: "Shopping",
-        date: "13-06-2026",
-        amount: 850,
-        note: "T-shirt from local brand",
-        time: "4:20 PM",
-      },
-      {
-        id: "t6",
-        user: "Rakib",
-        type: "expense",
-        category: "Utilities",
-        date: "13-06-2026",
-        amount: 1500,
-        note: "Internet bill payment",
-        time: "6:45 PM",
-      },
-      {
-        id: "t7",
-        user: "Rakib",
-        type: "expense",
-        category: "Shopping",
-        date: "13-06-2026",
-        amount: 850,
-        note: "T-shirt from local brand",
-        time: "4:20 PM",
-      },
-    ],
-  },
-];
+type TFormattedTransaction = {
+  id: string;
+  user: string;
+  type: "income" | "expense";
+  category: TCategory;
+  date: string | Date;
+  amount: number;
+  note?: string;
+};
 
-export default function Transactions({ userId }: { userId: string }) {
-  const { data } = useGetAllTransactionQuery({ user: userId });
+type TTransactionSection = {
+  date: string;
+  data: TFormattedTransaction[];
+};
+
+export default function TransactionsList() {
+  const { loggedUser } = useAppSelector((state: any) => state.auth);
+  const { data } = useGetAllTransactionQuery({ user: loggedUser?._id });
   const transactions = data?.data || [];
+
+  const TRANSACTION_DATA = useMemo<TTransactionSection[]>(() => {
+    const grouped = transactions.reduce(
+      (acc: Record<string, any>, item: TTransaction) => {
+        const date = item.date as any;
+
+        if (!acc[date]) {
+          acc[date] = {
+            date,
+            data: [],
+          };
+        }
+
+        acc[date].data.push({
+          id: item._id,
+          user: item.user.name,
+          type: item.type,
+          category: item.category,
+          date: item.date,
+          amount: item.amount,
+          note: item.note,
+        });
+
+        return acc;
+      },
+      {},
+    );
+
+    return Object.values(grouped);
+  }, [transactions]);
 
   return (
     <View style={styles.container}>
-      {TRANSACTION_DATA.map((section) => (
-        <View key={section.date} style={styles.sectionWrapper}>
-          <Text style={styles.sectionHeader}>{section.date}</Text>
+      {TRANSACTION_DATA?.map((section) => (
+        <View key={section?.date} style={styles.sectionWrapper}>
+          <Text style={styles.sectionHeader}>{section?.date}</Text>
 
           {/* TRANSACTION ITEMS */}
-          {section.data.map((item, itemIdx) => {
+          {section.data.map((item, itemIdx: Number) => {
             const isExpense = item.type === "expense";
 
             return (
               <View key={item.id}>
                 <View style={styles.itemContainer}>
                   <View style={styles.iconBox}>
-                    <Feather
-                      name="activity"
-                      size={18}
-                      color={isExpense ? "#FFA1A1" : "#34C759"}
-                    />
+                    {renderIcon({
+                      family: item.category?.icon?.family,
+                      name: item.category?.icon?.name,
+                      size: 20,
+                      color: item.category?.icon?.color,
+                    })}
                   </View>
 
                   {/* MIDDLE: Title & Subtitle */}
                   <View style={styles.textContainer}>
                     <Text style={styles.mainTitle} numberOfLines={1}>
-                      {item.note.toUpperCase()}
+                      {item?.note}
                     </Text>
-                    <Text style={styles.subTitle}>{item.category}</Text>
+                    <Text style={styles.subTitle}>{item.category?.name}</Text>
                   </View>
 
                   {/* RIGHT: Amount & Time */}
@@ -131,7 +99,7 @@ export default function Transactions({ userId }: { userId: string }) {
                   </View>
                 </View>
 
-                {itemIdx < section.data.length - 1 && (
+                {Number(itemIdx) < section?.data?.length - 1 && (
                   <View style={styles.itemDivider} />
                 )}
               </View>

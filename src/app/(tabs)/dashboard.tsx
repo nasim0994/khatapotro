@@ -1,6 +1,6 @@
 import AppBackground from "@/components/AppBackground";
 import DashboardCard from "@/components/modules/dashboard/Card";
-import Transactions from "@/components/modules/dashboard/Transactions";
+import TransactionsList from "@/components/modules/dashboard/TransactionsList";
 import { useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
@@ -47,7 +47,7 @@ export default function Dashboard() {
             <DashboardCard />
 
             {/* transactions */}
-            <Transactions userId={loggedUser?._id} />
+            <TransactionsList />
           </View>
         </ScrollView>
       </SafeAreaView>
