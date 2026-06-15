@@ -4,18 +4,18 @@
     "slug": "KhataPotro",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/favicon.png",
     "scheme": "khatapotro",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/images/favicon.png"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-foreground.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./assets/images/favicon.png",
+        "backgroundImage": "./assets/images/favicon.png",
+        "monochromeImage": "./assets/images/favicon.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.nasim0994.KhataPotro"
@@ -32,7 +32,7 @@
         {
           "backgroundColor": "#208AEF",
           "android": {
-            "image": "./assets/images/splash-icon.png",
+            "image": "./assets/images/favicon.png",
             "imageWidth": 76
           }
         }

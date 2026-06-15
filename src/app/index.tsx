@@ -14,7 +14,7 @@ export default function SplashScreen() {
       const timeout = setTimeout(() => {
         setDisplayedText((prev) => prev + fullText[currentIndex]);
         setCurrentIndex((prev) => prev + 1);
-      }, 60);
+      }, 120);
 
       return () => clearTimeout(timeout);
     } else {
