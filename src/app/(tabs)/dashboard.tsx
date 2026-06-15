@@ -1,5 +1,4 @@
 import AppBackground from "@/components/AppBackground";
-import FloatingPlusButton from "@/components/FloatingPlusButton";
 import DashboardCard from "@/components/modules/dashboard/Card";
 import Transactions from "@/components/modules/dashboard/Transactions";
 import { useEffect, useState } from "react";
@@ -45,8 +44,6 @@ export default function Dashboard() {
 
             {/* transactions */}
             <Transactions />
-
-            <FloatingPlusButton />
           </View>
         </ScrollView>
       </SafeAreaView>

@@ -20,8 +20,8 @@ export default function FloatingPlusButton() {
 const styles = StyleSheet.create({
   fabButton: {
     position: "absolute",
-    bottom: Platform.OS === "ios" ? 150 : 140,
-    right: 24,
+    bottom: Platform.OS === "ios" ? 85 : 75,
+    right: 14,
     width: 56,
     height: 56,
     borderRadius: 28,

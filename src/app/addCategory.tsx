@@ -32,7 +32,7 @@ type SelectedIconType = {
   color: string;
 };
 
-// ক্যাটাগরি তৈরির জন্য একগাদা প্রিমিয়াম আইকন লিস্ট
+// ক্যাটাগরি তৈরির জন্য একগাদা প্রিমিয়াম আইকন লিস্ট
 const AVAILABLE_ICONS = [
   {
     id: "1",
@@ -80,7 +80,6 @@ const AVAILABLE_ICONS = [
   { id: "24", family: "MaterialCommunityIcons", name: "bus", color: "#06B6D4" },
 ];
 
-// ডাইনামিক আইকন রেন্ডারার ফাংশন
 const renderIcon = (
   family: string,
   name: string,
@@ -220,7 +219,6 @@ export default function AddCategoryScreen() {
               <View style={styles.iconWrapper}>
                 {renderIcon(item.family, item.name, 20, item.color)}
               </View>
-              {/* text */}
               <Text
                 style={{
                   marginTop: 8,
@@ -241,15 +239,21 @@ export default function AddCategoryScreen() {
           animationType="slide"
           transparent
           visible={modalVisible}
-          onShow={() => {
-            setTimeout(() => nameInputRef.current?.focus(), 150);
-          }}
           onRequestClose={closeModal}
         >
+          {/* কীবোর্ড হ্যান্ডেল করার জন্য KeyboardAvoidingView */}
           <KeyboardAvoidingView
             style={styles.modalRoot}
-            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
           >
+            {/* মোডালের ফাঁকা ব্যাকগ্রাউন্ডে ক্লিক করলে ক্লোজ হওয়ার জন্য ওভারলে */}
+            <TouchableOpacity
+              style={styles.modalOverlay}
+              activeOpacity={1}
+              onPress={closeModal}
+            />
+
             <LinearGradient
               colors={["#0D1117", "#121F38"]}
               style={styles.bottomSheetContainer}
@@ -293,46 +297,53 @@ export default function AddCategoryScreen() {
                 </TouchableOpacity>
               </View>
 
-              {/* Category Name Input Field */}
-              <View style={styles.fieldsColumnWrapper}>
-                <View style={styles.inputFieldBox}>
-                  <TextInput
-                    ref={nameInputRef}
-                    style={styles.fieldInputText}
-                    placeholder="Enter category name..."
-                    placeholderTextColor="rgba(255,255,255,0.25)"
-                    value={categoryName}
-                    onChangeText={setCategoryName}
-                    maxLength={20}
-                  />
-                </View>
-              </View>
-
-              {/* Submit Button */}
-              <TouchableOpacity
-                style={[
-                  styles.modalSaveButton,
-                  {
-                    backgroundColor: activeColor,
-                    opacity: categoryName.trim() ? 1 : 0.5,
-                  },
-                ]}
-                onPress={handleSave}
-                activeOpacity={0.85}
-                disabled={!categoryName.trim()}
+              {/* কীবোর্ড ওপেন অবস্থায় স্ক্রোলিং ঠিক রাখার জন্য */}
+              <ScrollView
+                bounces={false}
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
               >
-                <Text
+                {/* Category Name Input Field */}
+                <View style={styles.fieldsColumnWrapper}>
+                  <View style={styles.inputFieldBox}>
+                    <TextInput
+                      ref={nameInputRef}
+                      style={styles.fieldInputText}
+                      placeholder="Enter category name..."
+                      placeholderTextColor="rgba(255,255,255,0.25)"
+                      value={categoryName}
+                      onChangeText={setCategoryName}
+                      maxLength={20}
+                    />
+                  </View>
+                </View>
+
+                {/* Submit Button */}
+                <TouchableOpacity
                   style={[
-                    styles.modalSaveButtonText,
+                    styles.modalSaveButton,
                     {
-                      color:
-                        transactionType === "expense" ? "#FFFFFF" : "#06110A",
+                      backgroundColor: activeColor,
+                      opacity: categoryName.trim() ? 1 : 0.5,
                     },
                   ]}
+                  onPress={handleSave}
+                  activeOpacity={0.85}
+                  disabled={!categoryName.trim()}
                 >
-                  Add Category
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={[
+                      styles.modalSaveButtonText,
+                      {
+                        color:
+                          transactionType === "expense" ? "#FFFFFF" : "#06110A",
+                      },
+                    ]}
+                  >
+                    Add Category
+                  </Text>
+                </TouchableOpacity>
+              </ScrollView>
             </LinearGradient>
           </KeyboardAvoidingView>
         </Modal>
@@ -424,6 +435,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
   },
+  modalOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
   bottomSheetContainer: {
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,
@@ -432,6 +447,7 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === "ios" ? 34 : 24,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.08)",
+    maxHeight: "80%", // কীবোর্ড ওপেন হলে স্ক্রিন লেআউট ঠিক রাখার জন্য
   },
   sheetHandle: {
     width: 42,
@@ -490,12 +506,14 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 15,
     fontWeight: "600",
+    flex: 1, // অ্যান্ড্রয়েড ইনপুটের উইডথ প্রবলেম ফিক্স করার জন্য
   },
   modalSaveButton: {
     borderRadius: 18,
     paddingVertical: 16,
     alignItems: "center",
     marginTop: 4,
+    marginBottom: 12,
   },
   modalSaveButtonText: {
     fontSize: 15,

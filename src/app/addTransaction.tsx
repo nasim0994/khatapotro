@@ -220,15 +220,19 @@ export default function AddTransactionScreen() {
           animationType="slide"
           transparent
           visible={modalVisible}
-          onShow={() => {
-            setTimeout(() => amountInputRef.current?.focus(), 150);
-          }}
           onRequestClose={closeModal}
         >
           <KeyboardAvoidingView
             style={styles.modalRoot}
-            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
           >
+            <TouchableOpacity
+              style={styles.modalOverlay}
+              activeOpacity={1}
+              onPress={closeModal}
+            />
+
             <LinearGradient
               colors={["#121F38", "#0D1117"]}
               style={styles.bottomSheetContainer}
@@ -252,74 +256,81 @@ export default function AddTransactionScreen() {
                 </TouchableOpacity>
               </View>
 
-              <View style={styles.amountInputContainer}>
-                <TextInput
-                  ref={amountInputRef}
-                  style={styles.amountTextInput}
-                  placeholder="0.00"
-                  placeholderTextColor="rgba(255,255,255,0.16)"
-                  keyboardType="numeric"
-                  value={amount}
-                  onChangeText={setAmount}
-                />
-              </View>
+              {/* কীবোর্ডের কারণে স্ক্রিন ছোট হয়ে গেলেও যাতে স্ক্রোল করা যায় */}
+              <ScrollView
+                bounces={false}
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+              >
+                <View style={styles.amountInputContainer}>
+                  <TextInput
+                    ref={amountInputRef}
+                    style={styles.amountTextInput}
+                    placeholder="0.00"
+                    placeholderTextColor="rgba(255,255,255,0.16)"
+                    keyboardType="numeric"
+                    value={amount}
+                    onChangeText={setAmount}
+                  />
+                </View>
 
-              <View style={styles.fieldsColumnWrapper}>
-                <View style={styles.inputFieldBox}>
-                  <View style={styles.inputRow}>
-                    <Feather
-                      name="calendar"
-                      size={15}
-                      color="rgba(255,255,255,0.45)"
-                      style={{ marginRight: 8 }}
-                    />
+                <View style={styles.fieldsColumnWrapper}>
+                  <View style={styles.inputFieldBox}>
+                    <View style={styles.inputRow}>
+                      <Feather
+                        name="calendar"
+                        size={15}
+                        color="rgba(255,255,255,0.45)"
+                        style={{ marginRight: 8 }}
+                      />
+                      <TextInput
+                        style={styles.fieldInputText}
+                        value={date}
+                        onChangeText={setDate}
+                        placeholder="DD-MM-YYYY"
+                        placeholderTextColor="rgba(255,255,255,0.25)"
+                      />
+                    </View>
+                  </View>
+
+                  <View style={[styles.inputFieldBox, { marginTop: 12 }]}>
                     <TextInput
                       style={styles.fieldInputText}
-                      value={date}
-                      onChangeText={setDate}
-                      placeholder="DD-MM-YYYY"
+                      placeholder="Add description..."
                       placeholderTextColor="rgba(255,255,255,0.25)"
+                      value={note}
+                      onChangeText={setNote}
+                      multiline
+                      textAlignVertical="top"
                     />
                   </View>
                 </View>
 
-                <View style={[styles.inputFieldBox, { marginTop: 12 }]}>
-                  <TextInput
-                    style={styles.fieldInputText}
-                    placeholder="Add description..."
-                    placeholderTextColor="rgba(255,255,255,0.25)"
-                    value={note}
-                    onChangeText={setNote}
-                    multiline
-                    textAlignVertical="top"
-                  />
-                </View>
-              </View>
-
-              <TouchableOpacity
-                style={[
-                  styles.modalSaveButton,
-                  {
-                    backgroundColor: activeColor,
-                    opacity: amount.trim() ? 1 : 0.5,
-                  },
-                ]}
-                onPress={handleSave}
-                activeOpacity={0.85}
-                disabled={!amount.trim()}
-              >
-                <Text
+                <TouchableOpacity
                   style={[
-                    styles.modalSaveButtonText,
+                    styles.modalSaveButton,
                     {
-                      color:
-                        transactionType === "expense" ? "#FFFFFF" : "#06110A",
+                      backgroundColor: activeColor,
+                      opacity: amount.trim() ? 1 : 0.5,
                     },
                   ]}
+                  onPress={handleSave}
+                  activeOpacity={0.85}
+                  disabled={!amount.trim()}
                 >
-                  Save Transaction
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={[
+                      styles.modalSaveButtonText,
+                      {
+                        color:
+                          transactionType === "expense" ? "#FFFFFF" : "#06110A",
+                      },
+                    ]}
+                  >
+                    Save Transaction
+                  </Text>
+                </TouchableOpacity>
+              </ScrollView>
             </LinearGradient>
           </KeyboardAvoidingView>
         </Modal>
@@ -433,6 +444,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 
+  modalOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
+
   bottomSheetContainer: {
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,
@@ -441,6 +457,7 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === "ios" ? 34 : 24,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.08)",
+    maxHeight: "85%",
   },
 
   sheetHandle: {
@@ -495,6 +512,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     minWidth: 130,
     paddingVertical: 0,
+    textAlign: "center",
   },
 
   fieldsColumnWrapper: {
@@ -518,6 +536,7 @@ const styles = StyleSheet.create({
 
   fieldInputText: {
     color: "#FFFFFF",
+    flex: 1,
   },
 
   modalSaveButton: {
@@ -525,6 +544,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: "center",
     marginTop: 8,
+    marginBottom: 10,
   },
 
   modalSaveButtonText: {
