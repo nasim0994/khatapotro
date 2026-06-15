@@ -1,6 +1,7 @@
 import AppBackground from "@/components/AppBackground";
 import TransactionsList from "@/components/modules/dashboard/TransactionsList";
 import { useGetAllCategoryQuery } from "@/redux/features/categoryApi";
+import { useGetAllTransactionQuery } from "@/redux/features/transactionApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TCategory } from "@/types/categoryTypes";
 import { renderIcon } from "@/utils/renderIcon";
@@ -44,7 +45,10 @@ export default function AllTransactions() {
   const [categoryModalVisible, setCategoryModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data } = useGetAllCategoryQuery({ user: loggedUser?._id });
+  const { data } = useGetAllCategoryQuery({
+    user: loggedUser?._id,
+    type: activeTab !== "all" ? activeTab : undefined,
+  });
   const categories = data?.data || [];
 
   const filteredCategories = categories?.filter((cat: TCategory) =>
@@ -57,6 +61,24 @@ export default function AllTransactions() {
     const date = new Date(parseInt(year), parseInt(month) - 1);
     return date.toLocaleString("en-US", { month: "long", year: "numeric" });
   };
+
+  const [yearNumber, monthNumber] = selectedMonth.split(" ").map(Number);
+
+  const format = (date: Date) => {
+    return date.toLocaleDateString("en-CA");
+  };
+
+  const startDate = new Date(Date.UTC(yearNumber, monthNumber - 1, 1));
+  const endDate = new Date(Date.UTC(yearNumber, monthNumber, 0));
+
+  const { data: transactionData } = useGetAllTransactionQuery({
+    user: loggedUser?._id,
+    type: activeTab !== "all" ? activeTab : undefined,
+    category: selectedCategory?._id,
+    startDate,
+    endDate,
+  });
+  const transactions = transactionData?.data || [];
 
   return (
     <AppBackground>
@@ -160,7 +182,7 @@ export default function AllTransactions() {
           contentContainerStyle={{ paddingBottom: 20 }}
         >
           <Text style={styles.sectionLabel}>History Log</Text>
-          <TransactionsList />
+          <TransactionsList transactions={transactions} />
         </ScrollView>
 
         {/* ==================== DYNAMIC MONTH PICKER MODAL ==================== */}

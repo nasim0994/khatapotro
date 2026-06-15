@@ -1,5 +1,3 @@
-import { useGetAllTransactionQuery } from "@/redux/features/transactionApi";
-import { useAppSelector } from "@/redux/hooks";
 import { TCategory } from "@/types/categoryTypes";
 import { TTransaction } from "@/types/transactionType";
 import { renderIcon } from "@/utils/renderIcon";
@@ -21,13 +19,13 @@ type TTransactionSection = {
   data: TFormattedTransaction[];
 };
 
-export default function TransactionsList() {
-  const { loggedUser } = useAppSelector((state: any) => state.auth);
-  const { data } = useGetAllTransactionQuery({ user: loggedUser?._id });
-  const transactions = data?.data || [];
-
+export default function TransactionsList({
+  transactions,
+}: {
+  transactions: TTransaction[];
+}) {
   const TRANSACTION_DATA = useMemo<TTransactionSection[]>(() => {
-    const grouped = transactions.reduce(
+    const grouped = transactions?.reduce(
       (acc: Record<string, any>, item: TTransaction) => {
         const date = item.date as any;
 

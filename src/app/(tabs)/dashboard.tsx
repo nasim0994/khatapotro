@@ -1,6 +1,7 @@
 import AppBackground from "@/components/AppBackground";
 import DashboardCard from "@/components/modules/dashboard/Card";
 import TransactionsList from "@/components/modules/dashboard/TransactionsList";
+import { useGetAllTransactionQuery } from "@/redux/features/transactionApi";
 import { useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
@@ -9,6 +10,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Dashboard() {
   const { loggedUser } = useAppSelector((state: any) => state.auth);
   const [greeting, setGreeting] = useState("Hello");
+
+  const { data } = useGetAllTransactionQuery({ user: loggedUser?._id });
+  const transactions = data?.data || [];
 
   useEffect(() => {
     const hrs = new Date().getHours();
@@ -47,7 +51,7 @@ export default function Dashboard() {
             <DashboardCard />
 
             {/* transactions */}
-            <TransactionsList />
+            <TransactionsList transactions={transactions} />
           </View>
         </ScrollView>
       </SafeAreaView>
