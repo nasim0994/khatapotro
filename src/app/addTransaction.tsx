@@ -1,10 +1,14 @@
 import AppBackground from "@/components/AppBackground";
 import BackBtn from "@/components/BackBtn";
+import { commonStyles } from "@/constants/style";
 import { useGetAllCategoryQuery } from "@/redux/features/categoryApi";
+import { useAddTransactionMutation } from "@/redux/features/transactionApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TCategory } from "@/types/categoryTypes";
 import { renderIcon } from "@/utils/renderIcon";
 import { Feather } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import dayjs from "dayjs";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
@@ -21,6 +25,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 export default function AddTransactionScreen() {
   const router = useRouter();
@@ -29,45 +34,80 @@ export default function AddTransactionScreen() {
     "expense",
   );
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null,
+  );
   const [modalVisible, setModalVisible] = useState(false);
 
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
-  const [date, setDate] = useState("14-06-2026");
+
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
 
   const amountInputRef = useRef<TextInput>(null);
 
   const { data } = useGetAllCategoryQuery({ user: loggedUser?._id });
   const categories = data?.data || [];
 
-  const handleCategoryPress = (categoryName: string) => {
-    setSelectedCategory(categoryName);
+  const handleCategoryPress = (category: TCategory) => {
+    setSelectedCategory(category?.name);
+    setSelectedCategoryId(category?._id);
     setModalVisible(true);
   };
 
   const closeModal = () => {
     Keyboard.dismiss();
     setModalVisible(false);
+    setShow(false);
   };
 
-  const handleSave = () => {
+  const [addTransaction, { isLoading }] = useAddTransactionMutation();
+  const handleSubmit = async () => {
     if (!amount.trim()) return;
 
-    console.log({
-      transactionType,
-      category: selectedCategory,
+    const data = {
+      type: transactionType,
+      category: selectedCategoryId,
+      user: loggedUser?._id,
       amount,
       note,
       date,
-    });
+    };
 
-    setModalVisible(false);
-    setAmount("");
-    setNote("");
-    setSelectedCategory(null);
+    try {
+      const res = await addTransaction(data).unwrap();
+      if (res?.success) {
+        Toast.show({
+          type: "success",
+          text2: res?.message,
+          position: "top",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+
+        setModalVisible(false);
+        setAmount("");
+        setNote("");
+        setSelectedCategory(null);
+        setDate(new Date());
+        router.back();
+      }
+    } catch (err: any) {
+      const firstErrorMessage =
+        Array.isArray(err?.data?.error) && err.data.error.length > 0
+          ? `${err.data.error[0].path}: ${err.data.error[0].message}`
+          : err?.data?.message || "Something went wrong";
+
+      Toast.show({
+        type: "error",
+        text2: firstErrorMessage,
+        position: "top",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+    }
   };
-
-  const activeColor = transactionType === "expense" ? "#EB5757" : "#34C759";
 
   return (
     <AppBackground>
@@ -125,7 +165,7 @@ export default function AddTransactionScreen() {
             <TouchableOpacity
               key={item?._id}
               style={styles.categoryCard}
-              onPress={() => handleCategoryPress(item.name)}
+              onPress={() => handleCategoryPress(item)}
               activeOpacity={0.85}
             >
               <View style={styles.iconWrapper}>
@@ -204,7 +244,6 @@ export default function AddTransactionScreen() {
                 </TouchableOpacity>
               </View>
 
-              {/* কীবোর্ডের কারণে স্ক্রিন ছোট হয়ে গেলেও যাতে স্ক্রোল করা যায় */}
               <ScrollView
                 bounces={false}
                 showsVerticalScrollIndicator={false}
@@ -223,23 +262,40 @@ export default function AddTransactionScreen() {
                 </View>
 
                 <View style={styles.fieldsColumnWrapper}>
-                  <View style={styles.inputFieldBox}>
+                  <TouchableOpacity
+                    style={styles.inputFieldBox}
+                    activeOpacity={0.7}
+                    onPress={() => {
+                      Keyboard.dismiss();
+                      setShow(!show);
+                    }}
+                  >
                     <View style={styles.inputRow}>
                       <Feather
                         name="calendar"
-                        size={15}
-                        color="rgba(255,255,255,0.45)"
-                        style={{ marginRight: 8 }}
+                        size={16}
+                        color="#2F80ED"
+                        style={{ marginRight: 10 }}
                       />
-                      <TextInput
-                        style={styles.fieldInputText}
-                        value={date}
-                        onChangeText={setDate}
-                        placeholder="DD-MM-YYYY"
-                        placeholderTextColor="rgba(255,255,255,0.25)"
-                      />
+                      <Text style={styles.datePickerTriggerText}>
+                        {dayjs(date, "YYYY/MM/DD").format("DD-MMM-YYYY")}
+                      </Text>
                     </View>
-                  </View>
+                  </TouchableOpacity>
+
+                  {show && (
+                    <DateTimePicker
+                      value={date}
+                      mode="date"
+                      display="default"
+                      onValueChange={(event, selectedDate) => {
+                        setShow(false);
+                        if (selectedDate) {
+                          setDate(selectedDate);
+                        }
+                      }}
+                    />
+                  )}
 
                   <View style={[styles.inputFieldBox, { marginTop: 12 }]}>
                     <TextInput
@@ -255,27 +311,13 @@ export default function AddTransactionScreen() {
                 </View>
 
                 <TouchableOpacity
-                  style={[
-                    styles.modalSaveButton,
-                    {
-                      backgroundColor: activeColor,
-                      opacity: amount.trim() ? 1 : 0.5,
-                    },
-                  ]}
-                  onPress={handleSave}
+                  style={commonStyles.primaryButton}
+                  onPress={handleSubmit}
                   activeOpacity={0.85}
-                  disabled={!amount.trim()}
+                  disabled={!amount.trim() || isLoading}
                 >
-                  <Text
-                    style={[
-                      styles.modalSaveButtonText,
-                      {
-                        color:
-                          transactionType === "expense" ? "#FFFFFF" : "#06110A",
-                      },
-                    ]}
-                  >
-                    Save Transaction
+                  <Text style={commonStyles.primaryButtonText}>
+                    {isLoading ? "Loading..." : "Save Transaction"}
                   </Text>
                 </TouchableOpacity>
               </ScrollView>
@@ -288,24 +330,14 @@ export default function AddTransactionScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-  },
-
+  container: { flex: 1, paddingHorizontal: 16 },
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 16,
   },
-
-  headerTitle: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "700",
-  },
-
+  headerTitle: { color: "#FFFFFF", fontSize: 18, fontWeight: "700" },
   typeSelectorContainer: {
     flexDirection: "row",
     backgroundColor: "rgba(255, 255, 255, 0.04)",
@@ -313,44 +345,18 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginBottom: 20,
   },
-
   typeTab: {
     flex: 1,
     paddingVertical: 12,
     alignItems: "center",
     borderRadius: 10,
   },
-
-  activeExpenseTab: {
-    backgroundColor: "#EB5757",
-  },
-
-  activeIncomeTab: {
-    backgroundColor: "#34C759",
-  },
-
-  typeTabText: {
-    color: "#D1D5DB",
-    fontSize: 14,
-    fontWeight: "600",
-  },
-
-  activeTypeText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
-  },
-
-  activeIncomeText: {
-    color: "#06110A",
-    fontWeight: "700",
-  },
-
-  scrollGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    paddingBottom: 30,
-  },
-
+  activeExpenseTab: { backgroundColor: "#EB5757" },
+  activeIncomeTab: { backgroundColor: "#2F80ED" },
+  typeTabText: { color: "#D1D5DB", fontSize: 14, fontWeight: "600" },
+  activeTypeText: { color: "#FFFFFF", fontWeight: "700" },
+  activeIncomeText: { color: "#06110A", fontWeight: "700" },
+  scrollGrid: { flexDirection: "row", flexWrap: "wrap", paddingBottom: 30 },
   categoryCard: {
     width: "22.5%",
     marginHorizontal: "1.25%",
@@ -362,13 +368,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.06)",
   },
-
   addNewCategoryCard: {
     borderStyle: "dashed",
     borderColor: "rgba(255, 255, 255, 0.15)",
     backgroundColor: "transparent",
   },
-
   iconWrapper: {
     width: 42,
     height: 42,
@@ -378,7 +382,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 6,
   },
-
   categoryName: {
     color: "#D1D5DB",
     fontSize: 10,
@@ -386,17 +389,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingHorizontal: 2,
   },
-
-  modalRoot: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-
+  modalRoot: { justifyContent: "flex-end", flex: 1 },
   modalOverlay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
-
   bottomSheetContainer: {
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,
@@ -407,7 +404,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.08)",
     maxHeight: "85%",
   },
-
   sheetHandle: {
     width: 42,
     height: 5,
@@ -416,14 +412,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 16,
   },
-
   modalHeaderRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 14,
   },
-
   modalLabel: {
     color: "rgba(255,255,255,0.35)",
     fontSize: 10,
@@ -431,13 +425,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     marginBottom: 4,
   },
-
-  modalSelectedTitle: {
-    color: "#FFFFFF",
-    fontSize: 14,
-    fontWeight: "800",
-  },
-
+  modalSelectedTitle: { color: "#FFFFFF", fontSize: 14, fontWeight: "800" },
   closeButton: {
     width: 36,
     height: 36,
@@ -446,57 +434,40 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
   amountInputContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 14,
   },
-
   amountTextInput: {
     color: "#FFFFFF",
     fontSize: 42,
     fontWeight: "800",
     minWidth: 130,
-    paddingVertical: 0,
+    paddingVertical: 8,
     textAlign: "center",
+    includeFontPadding: false,
   },
-
-  fieldsColumnWrapper: {
-    flexDirection: "column",
-    marginVertical: 16,
-  },
-
+  fieldsColumnWrapper: { flexDirection: "column", marginVertical: 16 },
   inputFieldBox: {
     backgroundColor: "rgba(255, 255, 255, 0.04)",
     borderRadius: 14,
     paddingHorizontal: 13,
-    paddingVertical: 11,
+    paddingVertical: 14,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.07)",
   },
+  inputRow: { flexDirection: "row", alignItems: "center" },
+  fieldInputText: { color: "#FFFFFF", flex: 1 },
 
-  inputRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  fieldInputText: {
-    color: "#FFFFFF",
-    flex: 1,
-  },
-
-  modalSaveButton: {
-    borderRadius: 18,
-    paddingVertical: 16,
-    alignItems: "center",
-    marginTop: 8,
-    marginBottom: 10,
-  },
-
-  modalSaveButtonText: {
-    fontSize: 15,
-    fontWeight: "800",
+  // 🎯 মডার্ন পিকারের কাস্টম স্টাইল:
+  datePickerTriggerText: { color: "#FFFFFF", fontSize: 15, fontWeight: "500" },
+  pickerWrapper: {
+    marginTop: 10,
+    borderRadius: 14,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.06)",
   },
 });

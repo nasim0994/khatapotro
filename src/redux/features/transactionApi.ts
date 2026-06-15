@@ -10,7 +10,16 @@ export const transactionApi = baseApi.injectEndpoints({
       }),
       providesTags: ["transaction"],
     }),
+    addTransaction: builder.mutation({
+      query: (data) => ({
+        url: "/transaction/add",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["transaction"],
+    }),
   }),
 });
 
-export const { useGetAllTransactionQuery } = transactionApi;
+export const { useGetAllTransactionQuery, useAddTransactionMutation } =
+  transactionApi;
