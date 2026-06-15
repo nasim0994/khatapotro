@@ -1,11 +1,13 @@
 import AppBackground from "@/components/AppBackground";
 import DashboardCard from "@/components/modules/dashboard/Card";
 import Transactions from "@/components/modules/dashboard/Transactions";
+import { useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Dashboard() {
+  const { loggedUser } = useAppSelector((state: any) => state.auth);
   const [greeting, setGreeting] = useState("Hello");
 
   useEffect(() => {
@@ -21,7 +23,9 @@ export default function Dashboard() {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ padding: 10 }}>
             <View>
-              <Text className="text-white text-sm">{greeting}</Text>
+              <Text className="text-white text-sm">
+                {greeting} {loggedUser?.name?.split(" ")[0] + "."}
+              </Text>
             </View>
 
             <View style={{ marginTop: 4, marginBottom: 8 }}>
@@ -43,7 +47,7 @@ export default function Dashboard() {
             <DashboardCard />
 
             {/* transactions */}
-            <Transactions />
+            <Transactions userId={loggedUser?._id} />
           </View>
         </ScrollView>
       </SafeAreaView>

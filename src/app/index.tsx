@@ -1,10 +1,12 @@
 import AppBackground from "@/components/AppBackground";
+import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
 export default function SplashScreen() {
   const router = useRouter();
+  const { loggedUser } = useAppSelector((state: any) => state.auth);
   const fullText = "KhataPotro.";
   const [displayedText, setDisplayedText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -19,7 +21,11 @@ export default function SplashScreen() {
       return () => clearTimeout(timeout);
     } else {
       const redirectTimeout = setTimeout(() => {
-        router.replace("/onboarding");
+        if (loggedUser?.email) {
+          router.replace("/dashboard");
+        } else {
+          router.replace("/onboarding");
+        }
       }, 500);
 
       return () => clearTimeout(redirectTimeout);

@@ -1,10 +1,10 @@
 import AppBackground from "@/components/AppBackground";
 import BackBtn from "@/components/BackBtn";
-import {
-  Feather,
-  FontAwesome5,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { useGetAllCategoryQuery } from "@/redux/features/categoryApi";
+import { useAppSelector } from "@/redux/hooks";
+import { TCategory } from "@/types/categoryTypes";
+import { renderIcon } from "@/utils/renderIcon";
+import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
@@ -22,71 +22,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const CATEGORIES = {
-  expense: [
-    {
-      id: "e1",
-      name: "Food",
-      icon: (
-        <MaterialCommunityIcons
-          name="food-fork-drink"
-          size={20}
-          color="#FFA1A1"
-        />
-      ),
-    },
-    {
-      id: "e2",
-      name: "Shopping",
-      icon: <Feather name="shopping-bag" size={18} color="#BB6BD9" />,
-    },
-    {
-      id: "e3",
-      name: "Transport",
-      icon: <FontAwesome5 name="car" size={18} color="#56CCF2" />,
-    },
-    {
-      id: "e4",
-      name: "Utilities",
-      icon: <Feather name="zap" size={18} color="#F2C94C" />,
-    },
-    {
-      id: "e5",
-      name: "Entertainment",
-      icon: <Feather name="film" size={18} color="#FF85A2" />,
-    },
-    {
-      id: "e6",
-      name: "Medical",
-      icon: <MaterialCommunityIcons name="pill" size={20} color="#FF7675" />,
-    },
-  ],
-  income: [
-    {
-      id: "i1",
-      name: "Salary",
-      icon: <FontAwesome5 name="wallet" size={16} color="#34C759" />,
-    },
-    {
-      id: "i2",
-      name: "Freelance",
-      icon: <Feather name="code" size={18} color="#4FACFE" />,
-    },
-    {
-      id: "i3",
-      name: "Investments",
-      icon: <Feather name="trending-up" size={18} color="#00FFCC" />,
-    },
-    {
-      id: "i4",
-      name: "Bonus",
-      icon: <Feather name="award" size={18} color="#F39C12" />,
-    },
-  ],
-};
-
 export default function AddTransactionScreen() {
   const router = useRouter();
+  const { loggedUser } = useAppSelector((state: any) => state.auth);
   const [transactionType, setTransactionType] = useState<"expense" | "income">(
     "expense",
   );
@@ -98,6 +36,9 @@ export default function AddTransactionScreen() {
   const [date, setDate] = useState("14-06-2026");
 
   const amountInputRef = useRef<TextInput>(null);
+
+  const { data } = useGetAllCategoryQuery({ user: loggedUser?._id });
+  const categories = data?.data || [];
 
   const handleCategoryPress = (categoryName: string) => {
     setSelectedCategory(categoryName);
@@ -180,14 +121,21 @@ export default function AddTransactionScreen() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {CATEGORIES[transactionType].map((item) => (
+          {categories?.map((item: TCategory) => (
             <TouchableOpacity
-              key={item.id}
+              key={item?._id}
               style={styles.categoryCard}
               onPress={() => handleCategoryPress(item.name)}
               activeOpacity={0.85}
             >
-              <View style={styles.iconWrapper}>{item.icon}</View>
+              <View style={styles.iconWrapper}>
+                {renderIcon({
+                  family: item?.icon?.family,
+                  name: item?.icon?.name,
+                  size: 20,
+                  color: item?.icon?.color,
+                })}
+              </View>
               <Text style={styles.categoryName} numberOfLines={1}>
                 {item.name}
               </Text>

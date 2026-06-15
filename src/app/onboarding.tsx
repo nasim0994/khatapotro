@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function OnboardingScreen() {
   const router = useRouter();
+  
 
   return (
     <AppBackground>
@@ -27,6 +28,11 @@ export default function OnboardingScreen() {
               source={require("@/assets/images/onboard_icon.webp")}
               className="w-full"
               resizeMode="cover"
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             />
           </View>
 

@@ -1,15 +1,12 @@
 import AppBackground from "@/components/AppBackground";
 import BackBtn from "@/components/BackBtn";
-import {
-  Entypo,
-  Feather,
-  FontAwesome,
-  FontAwesome5,
-  Ionicons,
-  MaterialCommunityIcons,
-  Octicons,
-} from "@expo/vector-icons";
+import { commonStyles } from "@/constants/style";
+import { useAddCategoryMutation } from "@/redux/features/categoryApi";
+import { useAppSelector } from "@/redux/hooks";
+import { renderIcon } from "@/utils/renderIcon";
+import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
   Keyboard,
@@ -24,15 +21,14 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
-// মোডালের জন্য আইকন টাইপ ডিফাইন করা
 type SelectedIconType = {
   family: string;
   name: string;
   color: string;
 };
 
-// ক্যাটাগরি তৈরির জন্য একগাদা প্রিমিয়াম আইকন লিস্ট
 const AVAILABLE_ICONS = [
   {
     id: "1",
@@ -80,35 +76,9 @@ const AVAILABLE_ICONS = [
   { id: "24", family: "MaterialCommunityIcons", name: "bus", color: "#06B6D4" },
 ];
 
-const renderIcon = (
-  family: string,
-  name: string,
-  size: number,
-  color: string,
-) => {
-  switch (family) {
-    case "MaterialCommunityIcons":
-      return (
-        <MaterialCommunityIcons name={name as any} size={size} color={color} />
-      );
-    case "Feather":
-      return <Feather name={name as any} size={size} color={color} />;
-    case "FontAwesome5":
-      return <FontAwesome5 name={name as any} size={size} color={color} />;
-    case "FontAwesome":
-      return <FontAwesome name={name as any} size={size} color={color} />;
-    case "Ionicons":
-      return <Ionicons name={name as any} size={size} color={color} />;
-    case "Entypo":
-      return <Entypo name={name as any} size={size} color={color} />;
-    case "Octicons":
-      return <Octicons name={name as any} size={size} color={color} />;
-    default:
-      return <Feather name="help-circle" size={size} color={color} />;
-  }
-};
-
 export default function AddCategoryScreen() {
+  const { loggedUser } = useAppSelector((state: any) => state.auth);
+  const router = useRouter();
   const [transactionType, setTransactionType] = useState<"expense" | "income">(
     "expense",
   );
@@ -131,19 +101,46 @@ export default function AddCategoryScreen() {
     setCategoryName("");
   };
 
-  const handleSave = () => {
+  const [addCategory, { isLoading }] = useAddCategoryMutation();
+  const handleSave = async () => {
     if (!categoryName.trim() || !selectedIcon) return;
 
-    console.log({
-      transactionType,
-      categoryName: categoryName.trim(),
+    const data = {
+      type: transactionType,
+      name: categoryName.trim(),
       icon: selectedIcon,
-    });
+      user: loggedUser?._id,
+    };
 
-    closeModal();
+    try {
+      const res = await addCategory(data).unwrap();
+      if (res?.success) {
+        Toast.show({
+          type: "success",
+          text2: res?.message,
+          position: "top",
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+
+        closeModal();
+        router.push("/addTransaction");
+      }
+    } catch (err: any) {
+      const firstErrorMessage =
+        Array.isArray(err?.data?.error) && err.data.error.length > 0
+          ? `${err.data.error[0].path}: ${err.data.error[0].message}`
+          : err?.data?.message || "Something went wrong";
+
+      Toast.show({
+        type: "error",
+        text2: firstErrorMessage,
+        position: "top",
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+    }
   };
-
-  const activeColor = transactionType === "expense" ? "#EB5757" : "#34C759";
 
   return (
     <AppBackground>
@@ -217,7 +214,12 @@ export default function AddCategoryScreen() {
               activeOpacity={0.85}
             >
               <View style={styles.iconWrapper}>
-                {renderIcon(item.family, item.name, 20, item.color)}
+                {renderIcon({
+                  family: item.family,
+                  name: item.name,
+                  size: 20,
+                  color: item.color,
+                })}
               </View>
               <Text
                 style={{
@@ -241,13 +243,11 @@ export default function AddCategoryScreen() {
           visible={modalVisible}
           onRequestClose={closeModal}
         >
-          {/* কীবোর্ড হ্যান্ডেল করার জন্য KeyboardAvoidingView */}
           <KeyboardAvoidingView
             style={styles.modalRoot}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
           >
-            {/* মোডালের ফাঁকা ব্যাকগ্রাউন্ডে ক্লিক করলে ক্লোজ হওয়ার জন্য ওভারলে */}
             <TouchableOpacity
               style={styles.modalOverlay}
               activeOpacity={1}
@@ -272,12 +272,12 @@ export default function AddCategoryScreen() {
                         },
                       ]}
                     >
-                      {renderIcon(
-                        selectedIcon.family,
-                        selectedIcon.name,
-                        20,
-                        selectedIcon.color,
-                      )}
+                      {renderIcon({
+                        family: selectedIcon.family,
+                        name: selectedIcon.name,
+                        size: 20,
+                        color: selectedIcon.color,
+                      })}
                     </View>
                   )}
                   <View>
@@ -320,16 +320,10 @@ export default function AddCategoryScreen() {
 
                 {/* Submit Button */}
                 <TouchableOpacity
-                  style={[
-                    styles.modalSaveButton,
-                    {
-                      backgroundColor: activeColor,
-                      opacity: categoryName.trim() ? 1 : 0.5,
-                    },
-                  ]}
+                  style={commonStyles.primaryButton}
                   onPress={handleSave}
                   activeOpacity={0.85}
-                  disabled={!categoryName.trim()}
+                  disabled={!categoryName.trim() || isLoading}
                 >
                   <Text
                     style={[
@@ -340,7 +334,7 @@ export default function AddCategoryScreen() {
                       },
                     ]}
                   >
-                    Add Category
+                    {isLoading ? "Loading..." : "Add Category"}
                   </Text>
                 </TouchableOpacity>
               </ScrollView>
@@ -447,7 +441,7 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === "ios" ? 34 : 24,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.08)",
-    maxHeight: "80%", // কীবোর্ড ওপেন হলে স্ক্রিন লেআউট ঠিক রাখার জন্য
+    maxHeight: "80%",
   },
   sheetHandle: {
     width: 42,
@@ -506,7 +500,7 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 15,
     fontWeight: "600",
-    flex: 1, // অ্যান্ড্রয়েড ইনপুটের উইডথ প্রবলেম ফিক্স করার জন্য
+    flex: 1,
   },
   modalSaveButton: {
     borderRadius: 18,

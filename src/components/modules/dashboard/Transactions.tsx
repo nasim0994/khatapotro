@@ -1,3 +1,4 @@
+import { useGetAllTransactionQuery } from "@/redux/features/transactionApi";
 import { Feather } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -84,7 +85,10 @@ const TRANSACTION_DATA = [
   },
 ];
 
-export default function Transactions() {
+export default function Transactions({ userId }: { userId: string }) {
+  const { data } = useGetAllTransactionQuery({ user: userId });
+  const transactions = data?.data || [];
+
   return (
     <View style={styles.container}>
       {TRANSACTION_DATA.map((section) => (
