@@ -1,12 +1,12 @@
 import AppBackground from "@/components/AppBackground";
 import BackBtn from "@/components/BackBtn";
+import CategoryCard from "@/components/modules/category/CategoryCard";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { commonStyles } from "@/constants/style";
 import { useGetAllCategoryQuery } from "@/redux/features/categoryApi";
 import { useAddTransactionMutation } from "@/redux/features/transactionApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TCategory } from "@/types/categoryTypes";
-import { renderIcon } from "@/utils/renderIcon";
 import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
@@ -165,29 +165,17 @@ export default function AddTransactionScreen() {
             keyboardShouldPersistTaps="handled"
           >
             {categories?.map((item: TCategory) => (
-              <TouchableOpacity
+              <CategoryCard
                 key={item?._id}
-                style={styles.categoryCard}
-                onPress={() => handleCategoryPress(item)}
-                activeOpacity={0.85}
-              >
-                <View style={styles.iconWrapper}>
-                  {renderIcon({
-                    family: item?.icon?.family,
-                    name: item?.icon?.name,
-                    size: 20,
-                    color: item?.icon?.color,
-                  })}
-                </View>
-                <Text style={styles.categoryName} numberOfLines={1}>
-                  {item.name}
-                </Text>
-              </TouchableOpacity>
+                category={item}
+                handleCategoryPress={handleCategoryPress}
+                setSelectedCategory={setSelectedCategory}
+              />
             ))}
 
             <TouchableOpacity
               style={[styles.categoryCard, styles.addNewCategoryCard]}
-              onPress={() => router.push("/addCategory")}
+              onPress={() => router.push("/category/add" as any)}
               activeOpacity={0.85}
             >
               <View
@@ -468,7 +456,6 @@ const styles = StyleSheet.create({
   inputRow: { flexDirection: "row", alignItems: "center" },
   fieldInputText: { color: "#FFFFFF", flex: 1 },
 
-  // 🎯 মডার্ন পিকারের কাস্টম স্টাইল:
   datePickerTriggerText: { color: "#FFFFFF", fontSize: 15, fontWeight: "500" },
   pickerWrapper: {
     marginTop: 10,

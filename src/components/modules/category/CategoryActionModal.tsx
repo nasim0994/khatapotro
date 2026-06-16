@@ -1,10 +1,10 @@
-import { useDeleteTransactionMutation } from "@/redux/features/transactionApi";
+import { useDeleteCategoryMutation } from "@/redux/features/categoryApi";
+import { TCategory } from "@/types/categoryTypes";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import {
   Alert,
   Modal,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,32 +12,22 @@ import {
   View,
 } from "react-native";
 import Toast from "react-native-toast-message";
-import { TFormattedTransaction } from "../dashboard/TransactionsList";
 
-export default function TransactionListActionModal({
-  menuVisible,
-  setMenuVisible,
-  selectedItem,
-  setSelectedItem,
+export default function CategoryActionModal({
+  isActionModalVisible,
+  setIsActionModalVisible,
+  category,
 }: {
-  menuVisible: boolean;
-  setMenuVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedItem: TFormattedTransaction | null;
-  setSelectedItem: React.Dispatch<
-    React.SetStateAction<TFormattedTransaction | null>
-  >;
+  category: TCategory;
+  isActionModalVisible: boolean;
+  setIsActionModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const router = useRouter();
-  const closeMenu = () => {
-    setMenuVisible(false);
-    setSelectedItem(null);
-  };
-
-  const [deleteTransaction] = useDeleteTransactionMutation();
-  const handleDelete = async (transaction: { _id: string; note: string }) => {
+  const [deleteCategory] = useDeleteCategoryMutation();
+  const handleDelete = async (category: { _id: string; name: string }) => {
     Alert.alert(
-      "Delete Transaction",
-      `Are you sure you want to delete "${transaction?.note}"?`,
+      "Delete Category",
+      `Are you sure you want to delete "${category?.name}"?`,
       [
         {
           text: "Cancel",
@@ -48,8 +38,8 @@ export default function TransactionListActionModal({
           style: "destructive",
           onPress: async () => {
             try {
-              const id = transaction?._id;
-              const res = await deleteTransaction(id).unwrap();
+              const id = category?._id;
+              const res = await deleteCategory(id).unwrap();
               if (res?.success) {
                 Toast.show({
                   type: "success",
@@ -59,7 +49,7 @@ export default function TransactionListActionModal({
                   autoHide: true,
                 });
 
-                closeMenu();
+                setIsActionModalVisible(false);
               }
             } catch (err: any) {
               const firstErrorMessage =
@@ -84,23 +74,21 @@ export default function TransactionListActionModal({
 
   return (
     <Modal
+      visible={isActionModalVisible}
+      transparent={true}
       animationType="slide"
-      transparent
-      visible={menuVisible}
       statusBarTranslucent
-      onRequestClose={closeMenu}
+      onRequestClose={() => setIsActionModalVisible(false)}
     >
-      <TouchableWithoutFeedback onPress={closeMenu}>
+      <TouchableWithoutFeedback onPress={() => setIsActionModalVisible(false)}>
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback>
             <View style={styles.modalContent}>
               <View style={styles.notchBar} />
 
               <Text style={styles.modalTitle}>
-                {selectedItem?.note
-                  ? `"${selectedItem.note}"`
-                  : selectedItem?.category?.name}{" "}
-                — ${selectedItem?.amount}
+                Category:{" "}
+                <Text style={{ color: "#2F80ED" }}>{category?.name}</Text>
               </Text>
 
               <View style={styles.actionButtonsWrapper}>
@@ -108,16 +96,13 @@ export default function TransactionListActionModal({
                   style={[styles.actionButton, styles.editButton]}
                   activeOpacity={0.7}
                   onPress={() => {
-                    if (!selectedItem?._id) return;
-                    closeMenu();
-                    router.push({
-                      pathname: `/transaction/edit/${selectedItem?._id}` as any,
-                    });
+                    setIsActionModalVisible(false);
+                    router.push(`/category/edit/${category?._id}` as any);
                   }}
                 >
                   <Feather name="edit-2" size={18} color="#2F80ED" />
                   <Text style={[styles.actionText, { color: "#2F80ED" }]}>
-                    Edit Details
+                    Edit Category
                   </Text>
                 </TouchableOpacity>
 
@@ -125,19 +110,12 @@ export default function TransactionListActionModal({
                   style={[styles.actionButton, styles.deleteButton]}
                   activeOpacity={0.7}
                   onPress={() => {
-                    if (selectedItem)
-                      handleDelete({
-                        _id: selectedItem?._id,
-                        note:
-                          selectedItem?.note ||
-                          selectedItem?.category?.name ||
-                          "",
-                      });
+                    handleDelete({ _id: category?._id, name: category?.name });
                   }}
                 >
                   <Feather name="trash-2" size={18} color="#EB5757" />
                   <Text style={[styles.actionText, { color: "#EB5757" }]}>
-                    Delete Transaction
+                    Delete Category
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -161,7 +139,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 24,
     paddingHorizontal: 24,
     paddingTop: 12,
-    paddingBottom: Platform.OS === "ios" ? 40 : 34,
+    paddingBottom: 34,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.05)",
   },

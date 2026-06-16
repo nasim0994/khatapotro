@@ -8,7 +8,7 @@ export default function FloatingPlusButton() {
     <>
       <TouchableOpacity
         style={styles.fabButton}
-        onPress={() => router.push("/addTransaction")}
+        onPress={() => router.push("/transaction/add" as any)}
         activeOpacity={0.7}
       >
         <Feather name="plus" size={26} color="#FFFFFF" />

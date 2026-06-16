@@ -2,6 +2,7 @@ import AppBackground from "@/components/AppBackground";
 import BackBtn from "@/components/BackBtn";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { commonStyles } from "@/constants/style";
+import { AVAILABLE_ICONS } from "@/data/categories";
 import { useAddCategoryMutation } from "@/redux/features/categoryApi";
 import { useAppSelector } from "@/redux/hooks";
 import { renderIcon } from "@/utils/renderIcon";
@@ -29,53 +30,6 @@ type SelectedIconType = {
   name: string;
   color: string;
 };
-
-const AVAILABLE_ICONS = [
-  {
-    id: "1",
-    family: "MaterialCommunityIcons",
-    name: "food-fork-drink",
-    color: "#FFA1A1",
-  },
-  { id: "2", family: "Feather", name: "shopping-bag", color: "#BB6BD9" },
-  { id: "3", family: "FontAwesome5", name: "car", color: "#56CCF2" },
-  { id: "4", family: "Feather", name: "zap", color: "#F2C94C" },
-  { id: "5", family: "Feather", name: "film", color: "#FF85A2" },
-  { id: "6", family: "MaterialCommunityIcons", name: "pill", color: "#FF7675" },
-  { id: "7", family: "FontAwesome5", name: "wallet", color: "#34C759" },
-  { id: "8", family: "Feather", name: "code", color: "#4FACFE" },
-  { id: "9", family: "Feather", name: "trending-up", color: "#00FFCC" },
-  { id: "10", family: "Feather", name: "award", color: "#F39C12" },
-  { id: "11", family: "Ionicons", name: "book-outline", color: "#A2E043" },
-  {
-    id: "12",
-    family: "MaterialCommunityIcons",
-    name: "dumbbell",
-    color: "#FF7675",
-  },
-  { id: "13", family: "FontAwesome", name: "plane", color: "#2F80ED" },
-  { id: "14", family: "Ionicons", name: "home-outline", color: "#10B981" },
-  { id: "15", family: "Feather", name: "heart", color: "#EF4444" },
-  {
-    id: "16",
-    family: "MaterialCommunityIcons",
-    name: "gift-outline",
-    color: "#F43F5E",
-  },
-  { id: "17", family: "FontAwesome", name: "coffee", color: "#8B5CF6" },
-  {
-    id: "18",
-    family: "Ionicons",
-    name: "game-controller-outline",
-    color: "#EC4899",
-  },
-  { id: "19", family: "Entypo", name: "tools", color: "#6B7280" },
-  { id: "20", family: "Octicons", name: "device-desktop", color: "#3B82F6" },
-  { id: "21", family: "MaterialCommunityIcons", name: "dog", color: "#10B981" },
-  { id: "22", family: "Feather", name: "scissors", color: "#F59E0B" },
-  { id: "23", family: "FontAwesome5", name: "baby", color: "#EC4899" },
-  { id: "24", family: "MaterialCommunityIcons", name: "bus", color: "#06B6D4" },
-];
 
 export default function AddCategoryScreen() {
   const { loggedUser } = useAppSelector((state: any) => state.auth);
@@ -125,7 +79,7 @@ export default function AddCategoryScreen() {
         });
 
         closeModal();
-        router.push("/addTransaction");
+        router.push("/transaction/add" as any);
       }
     } catch (err: any) {
       const firstErrorMessage =
@@ -202,7 +156,7 @@ export default function AddCategoryScreen() {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
-            {AVAILABLE_ICONS.map((item) => (
+            {AVAILABLE_ICONS?.map((item) => (
               <TouchableOpacity
                 key={item.id}
                 style={styles.categoryCard}
@@ -223,17 +177,6 @@ export default function AddCategoryScreen() {
                     color: item.color,
                   })}
                 </View>
-                <Text
-                  style={{
-                    marginTop: 8,
-                    fontSize: 11,
-                    color: "#FFFFFF",
-                    fontWeight: "600",
-                    textAlign: "center",
-                  }}
-                >
-                  {item.name.replace(/-/g, " ")}
-                </Text>
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -412,15 +355,16 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   categoryCard: {
-    width: "22.5%",
-    marginHorizontal: "1.25%",
-    backgroundColor: "rgba(255, 255, 255, 0.08)",
+    width: "22%",
+    marginHorizontal: "1.5%",
+    aspectRatio: 1,
+    backgroundColor: "rgba(255,255,255,0.03)",
     borderRadius: 16,
-    paddingVertical: 14,
+    justifyContent: "center",
     alignItems: "center",
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.06)",
+    borderColor: "rgba(255,255,255,0.05)",
   },
   iconWrapper: {
     width: 42,
