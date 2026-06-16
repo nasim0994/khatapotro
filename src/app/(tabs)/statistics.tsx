@@ -1,86 +1,74 @@
 import AppBackground from "@/components/AppBackground";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useGetStatisticsReportQuery } from "@/redux/features/reportApi";
+import { useAppSelector } from "@/redux/hooks";
+import { TCategory } from "@/types/categoryTypes";
+import { renderIcon } from "@/utils/renderIcon";
+import { Feather } from "@expo/vector-icons";
+import dayjs from "dayjs";
 import { useState } from "react";
 import {
+  ActivityIndicator,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
+import DatePicker from "react-native-modern-datepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const TOP_SPENDING = [
-  {
-    _id: "1",
-    name: "Food & Dining",
-    amount: "$340.00",
-    percentage: 0.65,
-    icon: "food-fork-drink",
-    iconFamily: "MaterialCommunityIcons",
-    color: "#FF9F0A",
-  },
-  {
-    _id: "2",
-    name: "Shopping",
-    amount: "$185.50",
-    percentage: 0.4,
-    icon: "shopping-bag",
-    iconFamily: "Feather",
-    color: "#BF5AF2",
-  },
-  {
-    _id: "3",
-    name: "Transport & Fuel",
-    amount: "$92.00",
-    percentage: 0.2,
-    icon: "car",
-    iconFamily: "MaterialCommunityIcons",
-    color: "#64D2FF",
-  },
-  {
-    _id: "4",
-    name: "Electricity Bill",
-    amount: "$60.00",
-    percentage: 0.12,
-    icon: "flash",
-    iconFamily: "MaterialCommunityIcons",
-    color: "#FFD60A",
-  },
-];
-
-const CategoryIcon = ({
-  name,
-  family,
-  size = 18,
-  color = "#D1D5DB",
-}: {
-  name: string;
-  family: string;
-  size?: number;
-  color?: string;
-}) => {
-  if (family === "Feather") {
-    return <Feather name={name as any} size={size} color={color} />;
-  }
-  return (
-    <MaterialCommunityIcons name={name as any} size={size} color={color} />
-  );
+type TStatisticCategory = {
+  category: TCategory;
+  percentage: number;
+  amount: number;
 };
 
 export default function Statistics() {
+  const { loggedUser } = useAppSelector((state) => state.auth);
   const [activeTab, setActiveTab] = useState<"income" | "expense">("expense");
-  const [selectedMonth, setSelectedMonth] = useState("June 2026");
+
+  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+
+  const { data, isLoading, isFetching } = useGetStatisticsReportQuery(
+    {
+      id: loggedUser?._id,
+      query: {
+        type: activeTab,
+        month: currentDate.format("MM-YYYY"),
+      },
+    },
+    {
+      skip: !loggedUser?._id,
+    },
+  );
+  const statistic = data?.data;
+
+  const handleMonthChange = (monthAndYear: string) => {
+    const [year, month] = monthAndYear.split(" ");
+    setCurrentDate(dayjs(`${year}-${month}-01`));
+    setIsDatePickerVisible(false);
+  };
+
+  const showLoading = isLoading || isFetching;
+  const hasData = statistic?.categories && statistic.categories.length > 0;
 
   return (
     <AppBackground>
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-        {/* ১. হেডার এরিয়া */}
         <View style={styles.headerRow}>
           <Text style={styles.headerTitle}>Statistics</Text>
 
-          <TouchableOpacity style={styles.monthSelector} activeOpacity={0.7}>
-            <Text style={styles.monthSelectorText}>{selectedMonth}</Text>
+          <TouchableOpacity
+            style={styles.monthSelector}
+            activeOpacity={0.7}
+            onPress={() => setIsDatePickerVisible(true)}
+          >
+            <Text style={styles.monthSelectorText}>
+              {currentDate.format("MMMM YYYY")}
+            </Text>
             <Feather
               name="chevron-down"
               size={14}
@@ -90,7 +78,6 @@ export default function Statistics() {
           </TouchableOpacity>
         </View>
 
-        {/* ২. Income | Expense Tab */}
         <View style={styles.tabContainer}>
           <TouchableOpacity
             style={[
@@ -133,80 +120,124 @@ export default function Statistics() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 30 }}
         >
-          {/* ৩. চার্ট এরিয়া প্লেসহোল্ডার */}
           <View style={styles.chartCard}>
             <View style={styles.chartHeader}>
               <Text style={styles.chartTitle}>
                 Total {activeTab === "expense" ? "Spent" : "Earned"}
               </Text>
               <Text style={styles.chartTotalAmount}>
-                {activeTab === "expense" ? "$677.50" : "$2,450.00"}
-              </Text>
-            </View>
-
-            {/* 📈 চার্ট কম্পোনেন্ট প্লেসহোল্ডার */}
-            <View style={styles.chartVisualPlaceholder}>
-              <Feather
-                name="trending-up"
-                size={32}
-                color="rgba(255,255,255,0.15)"
-              />
-              <Text style={styles.chartPlaceholderText}>
-                [ Your Chart Component Here ]
+                {showLoading ? "---" : statistic?.total || 0}
               </Text>
             </View>
           </View>
 
-          {/* ৪. টপ স্পেন্ডিং/আর্নিং ক্যাটাগরি লিস্ট */}
           <Text style={styles.sectionLabel}>
             Top {activeTab === "expense" ? "Spending" : "Sources"}
           </Text>
 
-          <View style={styles.categoryListCard}>
-            {TOP_SPENDING.map((item) => (
-              <View key={item._id} style={styles.categoryItemRow}>
-                {/* আইকন বক্স */}
-                <View
-                  style={[
-                    styles.iconWrapper,
-                    { backgroundColor: `${item.color}15` },
-                  ]}
-                >
-                  {/* ফিক্সড ডাইনামিক আইকন কল */}
-                  <CategoryIcon
-                    name={item.icon}
-                    family={item.iconFamily}
-                    size={18}
-                    color={item.color}
-                  />
-                </View>
-
-                {/* প্রোগ্রেস বার এবং নাম */}
-                <View style={styles.itemMetaInfo}>
-                  <View style={styles.itemTitleRow}>
-                    <Text style={styles.categoryNameText}>{item.name}</Text>
-                    <Text style={styles.categoryAmountText}>{item.amount}</Text>
+          {showLoading ? (
+            <View style={styles.centerStateWrapper}>
+              <ActivityIndicator size="small" color="#34C759" />
+              <Text style={styles.stateText}>Loading data...</Text>
+            </View>
+          ) : !hasData ? (
+            <View style={styles.centerStateWrapper}>
+              <Feather
+                name="pie-chart"
+                size={32}
+                color="rgba(255,255,255,0.2)"
+              />
+              <Text style={styles.stateText}>
+                No data available for this month
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.categoryListCard}>
+              {statistic?.categories?.map((item: TStatisticCategory) => (
+                <View key={item?.category?._id} style={styles.categoryItemRow}>
+                  <View
+                    style={[
+                      styles.iconWrapper,
+                      {
+                        backgroundColor: `${item?.category?.icon?.color}20`,
+                        borderRadius: 50,
+                      },
+                    ]}
+                  >
+                    {renderIcon({
+                      family: item?.category?.icon?.family,
+                      name: item?.category?.icon?.name,
+                      color: item?.category?.icon?.color,
+                      size: 20,
+                    })}
                   </View>
 
-                  {/* কাস্টম প্রোগ্রেস বার */}
-                  <View style={styles.progressBarTrack}>
-                    <View
-                      style={[
-                        styles.progressBarFill,
-                        {
-                          width: `${item.percentage * 100}%`,
-                          backgroundColor:
-                            activeTab === "expense" ? item.color : "#34C759",
-                        },
-                      ]}
-                    />
+                  <View style={styles.itemMetaInfo}>
+                    <View style={styles.itemTitleRow}>
+                      <Text style={styles.categoryNameText}>
+                        {item?.category?.name}
+                      </Text>
+                      <Text style={styles.categoryAmountText}>
+                        {item?.amount}
+                      </Text>
+                    </View>
+
+                    <View style={styles.progressBarTrack}>
+                      <View
+                        style={[
+                          styles.progressBarFill,
+                          {
+                            width: `${item?.percentage * 100}%`,
+                            backgroundColor:
+                              activeTab === "expense"
+                                ? item?.category?.icon?.color
+                                : "#34C759",
+                          },
+                        ]}
+                      />
+                    </View>
                   </View>
                 </View>
-              </View>
-            ))}
-          </View>
+              ))}
+            </View>
+          )}
         </ScrollView>
       </SafeAreaView>
+
+      <Modal
+        visible={isDatePickerVisible}
+        transparent
+        animationType="slide"
+        statusBarTranslucent
+        onRequestClose={() => setIsDatePickerVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setIsDatePickerVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                <View style={styles.notchBar} />
+                <Text style={styles.modalTitle}>Select Month</Text>
+                <DatePicker
+                  mode="monthYear"
+                  selectorStartingYear={2020}
+                  current={currentDate.format("YYYY/MM")}
+                  onMonthYearChange={handleMonthChange}
+                  locale="en"
+                  isGregorian={true}
+                  options={{
+                    backgroundColor: "#121F38",
+                    textHeaderColor: "#FFFFFF",
+                    textDefaultColor: "#D1D5DB",
+                    selectedTextColor: "#fff",
+                    mainColor: "#2F80ED",
+                    textSecondaryColor: "rgba(255,255,255,0.4)",
+                  }}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </AppBackground>
   );
 }
@@ -283,7 +314,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   chartHeader: {
-    marginBottom: 16,
+    marginBottom: 4,
   },
   chartTitle: {
     color: "rgba(255, 255, 255, 0.4)",
@@ -295,22 +326,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "700",
     marginTop: 4,
-  },
-  chartVisualPlaceholder: {
-    height: 180,
-    backgroundColor: "rgba(255, 255, 255, 0.02)",
-    borderRadius: 16,
-    borderWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "rgba(255, 255, 255, 0.1)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  chartPlaceholderText: {
-    color: "rgba(255, 255, 255, 0.25)",
-    fontSize: 13,
-    fontWeight: "500",
-    marginTop: 8,
   },
   sectionLabel: {
     color: "rgba(255, 255, 255, 0.4)",
@@ -369,5 +384,50 @@ const styles = StyleSheet.create({
   progressBarFill: {
     height: "100%",
     borderRadius: 3,
+  },
+  centerStateWrapper: {
+    backgroundColor: "rgba(255, 255, 255, 0.03)",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.06)",
+    borderRadius: 20,
+    paddingVertical: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 12,
+  },
+  stateText: {
+    color: "rgba(255, 255, 255, 0.4)",
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    justifyContent: "flex-end",
+  },
+  modalContent: {
+    backgroundColor: "#121F38",
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 34,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.05)",
+  },
+  notchBar: {
+    width: 40,
+    height: 4,
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
+    borderRadius: 2,
+    alignSelf: "center",
+    marginBottom: 16,
+  },
+  modalTitle: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "700",
+    marginBottom: 10,
+    textAlign: "center",
   },
 });

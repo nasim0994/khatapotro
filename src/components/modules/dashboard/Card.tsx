@@ -1,6 +1,18 @@
+import { useGetUserBalanceReportQuery } from "@/redux/features/reportApi";
+import { useAppSelector } from "@/redux/hooks";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import { Text, View } from "react-native";
 
 export default function DashboardCard() {
+  const { loggedUser } = useAppSelector((state) => state.auth);
+  dayjs.extend(customParseFormat);
+
+  const { data } = useGetUserBalanceReportQuery(loggedUser?._id, {
+    skip: !loggedUser?._id,
+  });
+  const balance = data?.data;
+
   return (
     <View
       style={{
@@ -54,7 +66,7 @@ export default function DashboardCard() {
               letterSpacing: 0.5,
             }}
           >
-            JUNE 2026
+            {dayjs(balance?.month, "MM-YYYY").format("MMM-YYYY")}
           </Text>
         </View>
       </View>
@@ -72,7 +84,7 @@ export default function DashboardCard() {
             letterSpacing: -0.5,
           }}
         >
-          12,486
+          {balance?.balance || 0}
         </Text>
       </View>
 
@@ -137,7 +149,7 @@ export default function DashboardCard() {
               { color: "#FFFFFF" },
             ]}
           >
-            +$3,200
+            +{balance?.income || 0}
           </Text>
         </View>
 
@@ -197,7 +209,7 @@ export default function DashboardCard() {
               { color: "#FFA1A1" },
             ]}
           >
-            -$1,847
+            -{balance?.expense || 0}
           </Text>
         </View>
       </View>
