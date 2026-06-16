@@ -1,4 +1,6 @@
 import AppBackground from "@/components/AppBackground";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { userLogout } from "@/redux/slices/authSlice";
 import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -12,9 +14,9 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AccountScreen() {
+  const { loggedUser } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const user = {
-    name: "John Doe",
-    userId: "@johndoe2026",
     avatar:
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
     balance: "$12,450.00",
@@ -33,7 +35,6 @@ export default function AccountScreen() {
           <View style={styles.profileContainer}>
             <View style={styles.avatarWrapper}>
               <Image source={{ uri: user.avatar }} style={styles.avatar} />
-              {/* এডিট বাটনটি প্রোফাইল ছবির ঠিক কোণায় সুন্দর করে প্লেস করা হয়েছে */}
               <TouchableOpacity
                 style={styles.avatarEditBtn}
                 activeOpacity={0.85}
@@ -43,8 +44,8 @@ export default function AccountScreen() {
               </TouchableOpacity>
             </View>
 
-            <Text style={styles.userName}>{user.name}</Text>
-            <Text style={styles.userId}>{user.userId}</Text>
+            <Text style={styles.userName}>{loggedUser?.name}</Text>
+            <Text style={styles.userId}>{loggedUser?.email}</Text>
 
             {/* Profile Edit Button */}
             <TouchableOpacity
@@ -155,6 +156,7 @@ export default function AccountScreen() {
             <TouchableOpacity
               style={[styles.menuItem, styles.logoutItem]}
               activeOpacity={0.7}
+              onPress={() => dispatch(userLogout())}
             >
               <View style={styles.menuItemLeft}>
                 <View

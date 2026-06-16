@@ -57,7 +57,7 @@ export default function TransactionsList({
 
         acc[dateKey].data.push({
           _id: item._id,
-          user: item.user?.name,
+          user: item.user,
           type: item.type,
           category: item.category,
           date: item.date,
@@ -84,12 +84,10 @@ export default function TransactionsList({
   };
 
   const [deleteTransaction] = useDeleteTransactionMutation();
-  const handleDelete = async (transaction: TTransaction) => {
-    console.log(transaction);
-
+  const handleDelete = async (transaction: { _id: string; note: string }) => {
     Alert.alert(
       "Delete Transaction",
-      `Are you sure you want to delete "${transaction?.note || transaction?.category?.name}"?`,
+      `Are you sure you want to delete "${transaction?.note}"?`,
       [
         {
           text: "Cancel",
@@ -244,7 +242,11 @@ export default function TransactionsList({
               style={styles.actionButton}
               activeOpacity={0.7}
               onPress={() => {
-                if (selectedItem) handleDelete(selectedItem);
+                if (selectedItem)
+                  handleDelete({
+                    _id: selectedItem?._id,
+                    note: selectedItem?.note || "",
+                  });
               }}
             >
               <View

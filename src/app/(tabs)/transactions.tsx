@@ -175,8 +175,7 @@ export default function AllTransactions() {
           </TouchableOpacity>
         </View>
 
-        {/* ট্রানজেকশন লিস্ট এরিয়া */}
-        {transactions?.length >= 0 ? (
+        {transactions?.length <= 0 ? (
           <View style={styles.emptyContainer}>
             <View style={styles.emptyIconWrapper}>
               <Feather

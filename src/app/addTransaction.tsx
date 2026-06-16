@@ -91,6 +91,7 @@ export default function AddTransactionScreen() {
         setNote("");
         setSelectedCategory(null);
         setDate(new Date());
+        closeModal();
         router.back();
       }
     } catch (err: any) {
