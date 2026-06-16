@@ -1,5 +1,6 @@
 import AppBackground from "@/components/AppBackground";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { commonStyles } from "@/constants/style";
 import { AVAILABLE_ICONS } from "@/data/categories";
 import {
   useGetCategoryByIdQuery,
@@ -79,7 +80,7 @@ export default function EditCategory() {
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={commonStyles.loadingContainer}>
         <ActivityIndicator size="large" color="#2F80ED" />
       </View>
     );
@@ -212,12 +213,6 @@ export default function EditCategory() {
 }
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    backgroundColor: "#0D1117",
-    justifyContent: "center",
-    alignItems: "center",
-  },
   scrollContainer: { paddingHorizontal: 20, paddingTop: 10, paddingBottom: 40 },
   header: {
     flexDirection: "row",

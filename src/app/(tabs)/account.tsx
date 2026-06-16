@@ -1,9 +1,10 @@
 import AppBackground from "@/components/AppBackground";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { userLogout } from "@/redux/slices/authSlice";
-import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
+import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import {
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -14,6 +15,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AccountScreen() {
+  const route = useRouter();
   const { loggedUser } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const user = {
@@ -34,14 +36,17 @@ export default function AccountScreen() {
           {/* Profile Section */}
           <View style={styles.profileContainer}>
             <View style={styles.avatarWrapper}>
-              <Image source={{ uri: user.avatar }} style={styles.avatar} />
-              <TouchableOpacity
+              <Image
+                source={require("@/assets/images/user.png")}
+                style={styles.avatar}
+              />
+              {/* <TouchableOpacity
                 style={styles.avatarEditBtn}
                 activeOpacity={0.85}
                 onPress={() => console.log("Edit Avatar")}
               >
                 <Feather name="camera" size={14} color="#000000" />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
 
             <Text style={styles.userName}>{loggedUser?.name}</Text>
@@ -51,7 +56,7 @@ export default function AccountScreen() {
             <TouchableOpacity
               style={styles.editProfileBtn}
               activeOpacity={0.8}
-              onPress={() => console.log("Edit Profile Clicked")}
+              onPress={() => route.push("/account/editProfile")}
             >
               <Feather
                 name="edit-3"
@@ -63,53 +68,17 @@ export default function AccountScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* Quick Financial Summary Card */}
-          <LinearGradient
-            colors={["#121F38", "#0D1117"]}
-            style={styles.statsCard}
-          >
-            <View style={styles.balanceSection}>
-              <Text style={styles.statLabel}>Total Balance</Text>
-              <Text style={styles.statValue}>{user.balance}</Text>
-            </View>
-            <View style={styles.divider} />
-            <View style={styles.rowStats}>
-              <View style={styles.statSubBox}>
-                <View
-                  style={[
-                    styles.miniIcon,
-                    { backgroundColor: "rgba(52, 199, 89, 0.1)" },
-                  ]}
-                >
-                  <Feather name="arrow-down-left" size={16} color="#34C759" />
-                </View>
-                <View>
-                  <Text style={styles.miniLabel}>Income</Text>
-                  <Text style={styles.miniValue}>{user.income}</Text>
-                </View>
-              </View>
-              <View style={styles.statSubBox}>
-                <View
-                  style={[
-                    styles.miniIcon,
-                    { backgroundColor: "rgba(235, 87, 87, 0.1)" },
-                  ]}
-                >
-                  <Feather name="arrow-up-right" size={16} color="#EB5757" />
-                </View>
-                <View>
-                  <Text style={styles.miniLabel}>Expense</Text>
-                  <Text style={styles.miniValue}>{user.expense}</Text>
-                </View>
-              </View>
-            </View>
-          </LinearGradient>
-
           {/* Menu / Settings Options */}
           <View style={styles.menuContainer}>
             <Text style={styles.menuGroupTitle}>General</Text>
 
-            <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              activeOpacity={0.7}
+              onPress={() => {
+                route.push("/category/all" as any);
+              }}
+            >
               <View style={styles.menuItemLeft}>
                 <View style={styles.menuIconBox}>
                   <Ionicons name="grid-outline" size={18} color="#4FACFE" />
@@ -123,12 +92,22 @@ export default function AccountScreen() {
               />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              activeOpacity={0.7}
+              onPress={() => {
+                route.push("/(tabs)/transactions");
+              }}
+            >
               <View style={styles.menuItemLeft}>
                 <View style={styles.menuIconBox}>
-                  <Feather name="settings" size={18} color="#BB6BD9" />
+                  <MaterialCommunityIcons
+                    name="swap-horizontal"
+                    size={20}
+                    color="#ffa500"
+                  />
                 </View>
-                <Text style={styles.menuItemText}>App Settings</Text>
+                <Text style={styles.menuItemText}>Manage Transaction</Text>
               </View>
               <Feather
                 name="chevron-right"
@@ -137,12 +116,42 @@ export default function AccountScreen() {
               />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              activeOpacity={0.7}
+              onPress={() => {
+                route.push("/(tabs)/statistics");
+              }}
+            >
               <View style={styles.menuItemLeft}>
                 <View style={styles.menuIconBox}>
-                  <FontAwesome5 name="file-export" size={16} color="#F2C94C" />
+                  <Ionicons
+                    name="pie-chart-outline"
+                    size={20}
+                    color="#BB6BD9"
+                  />
                 </View>
-                <Text style={styles.menuItemText}>Export Data (CSV)</Text>
+                <Text style={styles.menuItemText}>Statistics</Text>
+              </View>
+              <Feather
+                name="chevron-right"
+                size={16}
+                color="rgba(255,255,255,0.3)"
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.menuItem}
+              activeOpacity={0.7}
+              onPress={() => {
+                route.push("/account/setting");
+              }}
+            >
+              <View style={styles.menuItemLeft}>
+                <View style={styles.menuIconBox}>
+                  <Ionicons name="settings-outline" size={20} color="#EB5757" />
+                </View>
+                <Text style={styles.menuItemText}>Setting</Text>
               </View>
               <Feather
                 name="chevron-right"
@@ -156,7 +165,24 @@ export default function AccountScreen() {
             <TouchableOpacity
               style={[styles.menuItem, styles.logoutItem]}
               activeOpacity={0.7}
-              onPress={() => dispatch(userLogout())}
+              onPress={() => {
+                Alert.alert(
+                  "Logout",
+                  "Are you sure you want to log out of your account?",
+                  [
+                    {
+                      text: "Cancel",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Logout",
+                      style: "destructive",
+                      onPress: () => dispatch(userLogout()),
+                    },
+                  ],
+                  { cancelable: true },
+                );
+              }}
             >
               <View style={styles.menuItemLeft}>
                 <View

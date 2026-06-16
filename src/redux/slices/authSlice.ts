@@ -4,6 +4,7 @@ export type TUser = {
   _id: string;
   name: string;
   email: string;
+  imageUrl?: string;
   iat: number;
   exp: number;
 };

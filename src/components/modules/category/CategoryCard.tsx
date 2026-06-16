@@ -6,7 +6,7 @@ import CategoryActionModal from "./CategoryActionModal";
 
 interface CategoryCardProps {
   category: TCategory;
-  handleCategoryPress: (category: TCategory) => void;
+  handleCategoryPress?: (category: TCategory) => void;
   setSelectedCategory: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
@@ -26,7 +26,7 @@ export default function CategoryCard({
     <>
       <TouchableOpacity
         style={styles.cardContainer}
-        onPress={() => handleCategoryPress(category)}
+        onPress={() => handleCategoryPress && handleCategoryPress(category)}
         activeOpacity={0.85}
         onLongPress={() => handleCategoryLongPress(category?._id)}
         delayLongPress={350}

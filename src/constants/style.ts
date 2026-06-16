@@ -35,4 +35,11 @@ export const commonStyles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
   },
+
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: "#0D1117",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
