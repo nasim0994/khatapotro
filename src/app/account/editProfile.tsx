@@ -71,7 +71,7 @@ export default function EditProfile() {
       if (res?.success) {
         Toast.show({
           type: "success",
-          text2: "profile updateProfile updated successfully!",
+          text2: "profile updated successfully!",
           position: "top",
           visibilityTime: 3000,
           autoHide: true,
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
   inputBox: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.02)",
+    backgroundColor: "#FFFFFF33",
     borderRadius: 16,
     paddingHorizontal: 16,
     height: 56,

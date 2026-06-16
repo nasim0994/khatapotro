@@ -10,6 +10,14 @@ export const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
+    updateUserPassword: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/user/update/password/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["user"],
+    }),
     getUserById: builder.query({
       query: (id) => ({
         url: `/user/${id}`,
@@ -17,7 +25,19 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["user"],
     }),
+    deletePermanentUser: builder.mutation({
+      query: (id) => ({
+        url: `/user/delete/permanent/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["user"],
+    }),
   }),
 });
 
-export const { useUpdateUserProfileMutation, useGetUserByIdQuery } = userApi;
+export const {
+  useUpdateUserProfileMutation,
+  useGetUserByIdQuery,
+  useUpdateUserPasswordMutation,
+  useDeletePermanentUserMutation,
+} = userApi;
