@@ -1,4 +1,10 @@
-import { Stack } from "expo-router";
+import {
+  Poppins_400Regular,
+  Poppins_700Bold,
+  useFonts,
+} from "@expo-google-fonts/poppins";
+import { SplashScreen, Stack } from "expo-router";
+import { useEffect } from "react";
 import Toast from "react-native-toast-message";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -6,6 +12,21 @@ import "../../global.css";
 import { persistor, store } from "./../redux/store";
 
 export default function RootLayout() {
+  const [loaded, error] = useFonts({
+    "Poppins-Regular": Poppins_400Regular,
+    "Poppins-Bold": Poppins_700Bold,
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

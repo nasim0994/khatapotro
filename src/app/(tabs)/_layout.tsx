@@ -2,7 +2,7 @@ import FloatingPlusButton from "@/components/FloatingPlusButton";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 
 export default function TabLayout() {
   return (
@@ -21,9 +21,10 @@ export default function TabLayout() {
 
             tabBarStyle: {
               position: "absolute",
-              left: 20,
-              right: 20,
+              left: 24,
+              right: 24,
               height: 64,
+              bottom: Platform.OS === "ios" ? 28 : 20,
               backgroundColor: "rgba(22, 27, 38, 0.95)",
               borderRadius: 32,
               borderWidth: 1,

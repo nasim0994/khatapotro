@@ -4,6 +4,10 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Poppins-Regular", "sans-serif"],
+        bold: ["Poppins-Bold", "sans-serif"],
+      },
       colors: {
         primary: {
           DEFAULT: "#2F80ED",

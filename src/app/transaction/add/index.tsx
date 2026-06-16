@@ -48,7 +48,10 @@ export default function AddTransactionScreen() {
 
   const amountInputRef = useRef<TextInput>(null);
 
-  const { data } = useGetAllCategoryQuery({ user: loggedUser?._id });
+  const { data } = useGetAllCategoryQuery({
+    user: loggedUser?._id,
+    type: transactionType,
+  });
   const categories = data?.data || [];
 
   const handleCategoryPress = (category: TCategory) => {
@@ -272,7 +275,7 @@ export default function AddTransactionScreen() {
                           style={{ marginRight: 10 }}
                         />
                         <Text style={styles.datePickerTriggerText}>
-                          {dayjs(date, "YYYY/MM/DD").format("DD-MMM-YYYY")}
+                          {dayjs(date).format("DD-MMM-YYYY")}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -440,7 +443,6 @@ const styles = StyleSheet.create({
     fontSize: 42,
     fontWeight: "800",
     minWidth: 130,
-    paddingVertical: 8,
     textAlign: "center",
     includeFontPadding: false,
   },

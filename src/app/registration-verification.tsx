@@ -43,9 +43,30 @@ export default function RegistrationVerification() {
   const handleOtpChange = (value: string, index: number) => {
     const cleanValue = value.replace(/[^0-9]/g, "");
 
+    if (cleanValue.length > 1) {
+      const pastedOtp = cleanValue.slice(0, 6).split("");
+      const newOtp = [...otp];
+
+      for (let i = 0; i < 6; i++) {
+        if (index + i < 6 && pastedOtp[i]) {
+          newOtp[index + i] = pastedOtp[i];
+        }
+      }
+
+      setOtp(newOtp);
+
+      const nextFocusIndex = Math.min(index + cleanValue.length - 1, 5);
+      inputRefs.current[nextFocusIndex]?.focus();
+      if (newOtp.join("").length === 6) {
+        Keyboard.dismiss();
+      }
+      return;
+    }
+
     const newOtp = [...otp];
     newOtp[index] = cleanValue;
     setOtp(newOtp);
+
     if (cleanValue && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }

@@ -202,7 +202,7 @@ export default function SignupScreen() {
               disabled={isLoading}
             >
               <Text className="text-white text-lg font-bold">
-                {isLoading ? "loading..." : "Register"}
+                {isLoading ? "Creating your account..." : "Register"}
               </Text>
             </TouchableOpacity>
 
