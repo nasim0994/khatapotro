@@ -82,10 +82,6 @@ export default function AllTransactions() {
   return (
     <AppBackground>
       <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-        <View style={styles.headerRow}>
-          <Text style={styles.headerTitle}>Transactions</Text>
-        </View>
-
         {/* Income | Expense | All Tab */}
         <View style={styles.tabContainer}>
           {["all", "income", "expense"].map((tab) => {
@@ -195,7 +191,6 @@ export default function AllTransactions() {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20 }}
           >
-            <Text style={styles.sectionLabel}>History Log</Text>
             <TransactionsList transactions={transactions} />
           </ScrollView>
         )}

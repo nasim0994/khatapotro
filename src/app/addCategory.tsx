@@ -1,5 +1,6 @@
 import AppBackground from "@/components/AppBackground";
 import BackBtn from "@/components/BackBtn";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { commonStyles } from "@/constants/style";
 import { useAddCategoryMutation } from "@/redux/features/categoryApi";
 import { useAppSelector } from "@/redux/hooks";
@@ -143,206 +144,210 @@ export default function AddCategoryScreen() {
   };
 
   return (
-    <AppBackground>
-      <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-        {/* Header Row */}
-        <View style={styles.headerRow}>
-          <BackBtn />
-          <Text style={styles.headerTitle}>Add Category</Text>
-          <View style={{ width: 40 }} />
-        </View>
+    <ProtectedRoute>
+      <AppBackground>
+        <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
+          {/* Header Row */}
+          <View style={styles.headerRow}>
+            <BackBtn />
+            <Text style={styles.headerTitle}>Add Category</Text>
+            <View style={{ width: 40 }} />
+          </View>
 
-        {/* Expense | Income Type Selector */}
-        <View style={styles.typeSelectorContainer}>
-          <TouchableOpacity
-            style={[
-              styles.typeTab,
-              transactionType === "expense" && styles.activeExpenseTab,
-            ]}
-            onPress={() => setTransactionType("expense")}
-            activeOpacity={0.8}
-          >
-            <Text
-              style={[
-                styles.typeTabText,
-                transactionType === "expense" && styles.activeTypeText,
-              ]}
-            >
-              Expense
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.typeTab,
-              transactionType === "income" && styles.activeIncomeTab,
-            ]}
-            onPress={() => setTransactionType("income")}
-            activeOpacity={0.8}
-          >
-            <Text
-              style={[
-                styles.typeTabText,
-                transactionType === "income" && styles.activeIncomeText,
-              ]}
-            >
-              Income
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Instruction Label */}
-        <Text style={styles.sectionLabel}>Select an Icon for Category</Text>
-
-        {/* Icons Grid */}
-        <ScrollView
-          contentContainerStyle={styles.scrollGrid}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
-          {AVAILABLE_ICONS.map((item) => (
+          {/* Expense | Income Type Selector */}
+          <View style={styles.typeSelectorContainer}>
             <TouchableOpacity
-              key={item.id}
-              style={styles.categoryCard}
-              onPress={() =>
-                handleIconPress({
-                  family: item.family,
-                  name: item.name,
-                  color: item.color,
-                })
-              }
-              activeOpacity={0.85}
+              style={[
+                styles.typeTab,
+                transactionType === "expense" && styles.activeExpenseTab,
+              ]}
+              onPress={() => setTransactionType("expense")}
+              activeOpacity={0.8}
             >
-              <View style={styles.iconWrapper}>
-                {renderIcon({
-                  family: item.family,
-                  name: item.name,
-                  size: 20,
-                  color: item.color,
-                })}
-              </View>
               <Text
-                style={{
-                  marginTop: 8,
-                  fontSize: 11,
-                  color: "#FFFFFF",
-                  fontWeight: "600",
-                  textAlign: "center",
-                }}
+                style={[
+                  styles.typeTabText,
+                  transactionType === "expense" && styles.activeTypeText,
+                ]}
               >
-                {item.name.replace(/-/g, " ")}
+                Expense
               </Text>
             </TouchableOpacity>
-          ))}
-        </ScrollView>
 
-        {/* Bottom Sheet Modal */}
-        <Modal
-          animationType="slide"
-          transparent
-          visible={modalVisible}
-          onRequestClose={closeModal}
-        >
-          <KeyboardAvoidingView
-            style={styles.modalRoot}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-          >
             <TouchableOpacity
-              style={styles.modalOverlay}
-              activeOpacity={1}
-              onPress={closeModal}
-            />
-
-            <LinearGradient
-              colors={["#0D1117", "#121F38"]}
-              style={styles.bottomSheetContainer}
+              style={[
+                styles.typeTab,
+                transactionType === "income" && styles.activeIncomeTab,
+              ]}
+              onPress={() => setTransactionType("income")}
+              activeOpacity={0.8}
             >
-              <View style={styles.sheetHandle} />
+              <Text
+                style={[
+                  styles.typeTabText,
+                  transactionType === "income" && styles.activeIncomeText,
+                ]}
+              >
+                Income
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-              <View style={styles.modalHeaderRow}>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  {selectedIcon && (
-                    <View
+          {/* Instruction Label */}
+          <Text style={styles.sectionLabel}>Select an Icon for Category</Text>
+
+          {/* Icons Grid */}
+          <ScrollView
+            contentContainerStyle={styles.scrollGrid}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            {AVAILABLE_ICONS.map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                style={styles.categoryCard}
+                onPress={() =>
+                  handleIconPress({
+                    family: item.family,
+                    name: item.name,
+                    color: item.color,
+                  })
+                }
+                activeOpacity={0.85}
+              >
+                <View style={styles.iconWrapper}>
+                  {renderIcon({
+                    family: item.family,
+                    name: item.name,
+                    size: 20,
+                    color: item.color,
+                  })}
+                </View>
+                <Text
+                  style={{
+                    marginTop: 8,
+                    fontSize: 11,
+                    color: "#FFFFFF",
+                    fontWeight: "600",
+                    textAlign: "center",
+                  }}
+                >
+                  {item.name.replace(/-/g, " ")}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          {/* Bottom Sheet Modal */}
+          <Modal
+            animationType="slide"
+            transparent
+            visible={modalVisible}
+            onRequestClose={closeModal}
+          >
+            <KeyboardAvoidingView
+              style={styles.modalRoot}
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+            >
+              <TouchableOpacity
+                style={styles.modalOverlay}
+                activeOpacity={1}
+                onPress={closeModal}
+              />
+
+              <LinearGradient
+                colors={["#0D1117", "#121F38"]}
+                style={styles.bottomSheetContainer}
+              >
+                <View style={styles.sheetHandle} />
+
+                <View style={styles.modalHeaderRow}>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    {selectedIcon && (
+                      <View
+                        style={[
+                          styles.modalIconPreview,
+                          {
+                            backgroundColor: "rgba(255,255,255,0.05)",
+                            marginRight: 10,
+                          },
+                        ]}
+                      >
+                        {renderIcon({
+                          family: selectedIcon.family,
+                          name: selectedIcon.name,
+                          size: 20,
+                          color: selectedIcon.color,
+                        })}
+                      </View>
+                    )}
+                    <View>
+                      <Text style={styles.modalLabel}>Create New Category</Text>
+                      <Text style={styles.modalSelectedTitle}>
+                        {transactionType.toUpperCase()} CATEGORY
+                      </Text>
+                    </View>
+                  </View>
+
+                  <TouchableOpacity
+                    style={styles.closeButton}
+                    onPress={closeModal}
+                    activeOpacity={0.8}
+                  >
+                    <Feather name="x" size={20} color="#D1D5DB" />
+                  </TouchableOpacity>
+                </View>
+
+                {/* কীবোর্ড ওপেন অবস্থায় স্ক্রোলিং ঠিক রাখার জন্য */}
+                <ScrollView
+                  bounces={false}
+                  showsVerticalScrollIndicator={false}
+                  keyboardShouldPersistTaps="handled"
+                >
+                  {/* Category Name Input Field */}
+                  <View style={styles.fieldsColumnWrapper}>
+                    <View style={styles.inputFieldBox}>
+                      <TextInput
+                        ref={nameInputRef}
+                        style={styles.fieldInputText}
+                        placeholder="Enter category name..."
+                        placeholderTextColor="rgba(255,255,255,0.25)"
+                        value={categoryName}
+                        onChangeText={setCategoryName}
+                        maxLength={20}
+                      />
+                    </View>
+                  </View>
+
+                  {/* Submit Button */}
+                  <TouchableOpacity
+                    style={commonStyles.primaryButton}
+                    onPress={handleSave}
+                    activeOpacity={0.85}
+                    disabled={!categoryName.trim() || isLoading}
+                  >
+                    <Text
                       style={[
-                        styles.modalIconPreview,
+                        styles.modalSaveButtonText,
                         {
-                          backgroundColor: "rgba(255,255,255,0.05)",
-                          marginRight: 10,
+                          color:
+                            transactionType === "expense"
+                              ? "#FFFFFF"
+                              : "#06110A",
                         },
                       ]}
                     >
-                      {renderIcon({
-                        family: selectedIcon.family,
-                        name: selectedIcon.name,
-                        size: 20,
-                        color: selectedIcon.color,
-                      })}
-                    </View>
-                  )}
-                  <View>
-                    <Text style={styles.modalLabel}>Create New Category</Text>
-                    <Text style={styles.modalSelectedTitle}>
-                      {transactionType.toUpperCase()} CATEGORY
+                      {isLoading ? "Loading..." : "Add Category"}
                     </Text>
-                  </View>
-                </View>
-
-                <TouchableOpacity
-                  style={styles.closeButton}
-                  onPress={closeModal}
-                  activeOpacity={0.8}
-                >
-                  <Feather name="x" size={20} color="#D1D5DB" />
-                </TouchableOpacity>
-              </View>
-
-              {/* কীবোর্ড ওপেন অবস্থায় স্ক্রোলিং ঠিক রাখার জন্য */}
-              <ScrollView
-                bounces={false}
-                showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps="handled"
-              >
-                {/* Category Name Input Field */}
-                <View style={styles.fieldsColumnWrapper}>
-                  <View style={styles.inputFieldBox}>
-                    <TextInput
-                      ref={nameInputRef}
-                      style={styles.fieldInputText}
-                      placeholder="Enter category name..."
-                      placeholderTextColor="rgba(255,255,255,0.25)"
-                      value={categoryName}
-                      onChangeText={setCategoryName}
-                      maxLength={20}
-                    />
-                  </View>
-                </View>
-
-                {/* Submit Button */}
-                <TouchableOpacity
-                  style={commonStyles.primaryButton}
-                  onPress={handleSave}
-                  activeOpacity={0.85}
-                  disabled={!categoryName.trim() || isLoading}
-                >
-                  <Text
-                    style={[
-                      styles.modalSaveButtonText,
-                      {
-                        color:
-                          transactionType === "expense" ? "#FFFFFF" : "#06110A",
-                      },
-                    ]}
-                  >
-                    {isLoading ? "Loading..." : "Add Category"}
-                  </Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </LinearGradient>
-          </KeyboardAvoidingView>
-        </Modal>
-      </SafeAreaView>
-    </AppBackground>
+                  </TouchableOpacity>
+                </ScrollView>
+              </LinearGradient>
+            </KeyboardAvoidingView>
+          </Modal>
+        </SafeAreaView>
+      </AppBackground>
+    </ProtectedRoute>
   );
 }
 

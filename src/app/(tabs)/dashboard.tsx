@@ -1,4 +1,5 @@
 import AppBackground from "@/components/AppBackground";
+import CategorySlider from "@/components/CategorySlider";
 import DashboardCard from "@/components/modules/dashboard/Card";
 import TransactionsList from "@/components/modules/dashboard/TransactionsList";
 import { useGetAllTransactionQuery } from "@/redux/features/transactionApi";
@@ -23,10 +24,13 @@ export default function Dashboard() {
   const startDate = startDateObj.toISOString();
   const endDate = endDateObj.toISOString();
 
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
   const { data } = useGetAllTransactionQuery({
     user: loggedUser?._id,
     startDate,
     endDate,
+    category: selectedCategory,
   });
   const transactions = data?.data || [];
 
@@ -65,6 +69,11 @@ export default function Dashboard() {
 
             {/* card */}
             <DashboardCard />
+
+            <CategorySlider
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
 
             {/* transactions */}
             {transactions?.length > 0 && (

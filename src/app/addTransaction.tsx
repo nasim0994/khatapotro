@@ -1,5 +1,6 @@
 import AppBackground from "@/components/AppBackground";
 import BackBtn from "@/components/BackBtn";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { commonStyles } from "@/constants/style";
 import { useGetAllCategoryQuery } from "@/redux/features/categoryApi";
 import { useAddTransactionMutation } from "@/redux/features/transactionApi";
@@ -111,222 +112,227 @@ export default function AddTransactionScreen() {
   };
 
   return (
-    <AppBackground>
-      <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
-        <View style={styles.headerRow}>
-          <BackBtn />
-          <Text style={styles.headerTitle}>Add Transaction</Text>
-          <View style={{ width: 40 }} />
-        </View>
+    <ProtectedRoute>
+      <AppBackground>
+        <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
+          <View style={styles.headerRow}>
+            <BackBtn />
+            <Text style={styles.headerTitle}>Add Transaction</Text>
+            <View style={{ width: 40 }} />
+          </View>
 
-        <View style={styles.typeSelectorContainer}>
-          <TouchableOpacity
-            style={[
-              styles.typeTab,
-              transactionType === "expense" && styles.activeExpenseTab,
-            ]}
-            onPress={() => setTransactionType("expense")}
-            activeOpacity={0.8}
-          >
-            <Text
-              style={[
-                styles.typeTabText,
-                transactionType === "expense" && styles.activeTypeText,
-              ]}
-            >
-              Expense
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.typeTab,
-              transactionType === "income" && styles.activeIncomeTab,
-            ]}
-            onPress={() => setTransactionType("income")}
-            activeOpacity={0.8}
-          >
-            <Text
-              style={[
-                styles.typeTabText,
-                transactionType === "income" && styles.activeIncomeText,
-              ]}
-            >
-              Income
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView
-          contentContainerStyle={styles.scrollGrid}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
-          {categories?.map((item: TCategory) => (
+          <View style={styles.typeSelectorContainer}>
             <TouchableOpacity
-              key={item?._id}
-              style={styles.categoryCard}
-              onPress={() => handleCategoryPress(item)}
-              activeOpacity={0.85}
+              style={[
+                styles.typeTab,
+                transactionType === "expense" && styles.activeExpenseTab,
+              ]}
+              onPress={() => setTransactionType("expense")}
+              activeOpacity={0.8}
             >
-              <View style={styles.iconWrapper}>
-                {renderIcon({
-                  family: item?.icon?.family,
-                  name: item?.icon?.name,
-                  size: 20,
-                  color: item?.icon?.color,
-                })}
-              </View>
-              <Text style={styles.categoryName} numberOfLines={1}>
-                {item.name}
+              <Text
+                style={[
+                  styles.typeTabText,
+                  transactionType === "expense" && styles.activeTypeText,
+                ]}
+              >
+                Expense
               </Text>
             </TouchableOpacity>
-          ))}
 
-          <TouchableOpacity
-            style={[styles.categoryCard, styles.addNewCategoryCard]}
-            onPress={() => router.push("/addCategory")}
-            activeOpacity={0.85}
-          >
-            <View
-              style={[
-                styles.iconWrapper,
-                { backgroundColor: "rgba(255,255,255,0.03)" },
-              ]}
-            >
-              <Feather name="plus" size={20} color="rgba(255,255,255,0.4)" />
-            </View>
-            <Text
-              style={[styles.categoryName, { color: "rgba(255,255,255,0.4)" }]}
-              numberOfLines={1}
-            >
-              Add New
-            </Text>
-          </TouchableOpacity>
-        </ScrollView>
-
-        <Modal
-          animationType="slide"
-          transparent
-          visible={modalVisible}
-          onRequestClose={closeModal}
-        >
-          <KeyboardAvoidingView
-            style={styles.modalRoot}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-          >
             <TouchableOpacity
-              style={styles.modalOverlay}
-              activeOpacity={1}
-              onPress={closeModal}
-            />
-
-            <LinearGradient
-              colors={["#121F38", "#0D1117"]}
-              style={styles.bottomSheetContainer}
+              style={[
+                styles.typeTab,
+                transactionType === "income" && styles.activeIncomeTab,
+              ]}
+              onPress={() => setTransactionType("income")}
+              activeOpacity={0.8}
             >
-              <View style={styles.sheetHandle} />
-
-              <View style={styles.modalHeaderRow}>
-                <View>
-                  <Text style={styles.modalLabel}>Selected Category</Text>
-                  <Text style={styles.modalSelectedTitle}>
-                    {selectedCategory} — {transactionType.toUpperCase()}
-                  </Text>
-                </View>
-
-                <TouchableOpacity
-                  style={styles.closeButton}
-                  onPress={closeModal}
-                  activeOpacity={0.8}
-                >
-                  <Feather name="x" size={20} color="#D1D5DB" />
-                </TouchableOpacity>
-              </View>
-
-              <ScrollView
-                bounces={false}
-                showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps="handled"
+              <Text
+                style={[
+                  styles.typeTabText,
+                  transactionType === "income" && styles.activeIncomeText,
+                ]}
               >
-                <View style={styles.amountInputContainer}>
-                  <TextInput
-                    ref={amountInputRef}
-                    style={styles.amountTextInput}
-                    placeholder="0.00"
-                    placeholderTextColor="rgba(255,255,255,0.16)"
-                    keyboardType="numeric"
-                    value={amount}
-                    onChangeText={setAmount}
-                  />
+                Income
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            contentContainerStyle={styles.scrollGrid}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            {categories?.map((item: TCategory) => (
+              <TouchableOpacity
+                key={item?._id}
+                style={styles.categoryCard}
+                onPress={() => handleCategoryPress(item)}
+                activeOpacity={0.85}
+              >
+                <View style={styles.iconWrapper}>
+                  {renderIcon({
+                    family: item?.icon?.family,
+                    name: item?.icon?.name,
+                    size: 20,
+                    color: item?.icon?.color,
+                  })}
+                </View>
+                <Text style={styles.categoryName} numberOfLines={1}>
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+
+            <TouchableOpacity
+              style={[styles.categoryCard, styles.addNewCategoryCard]}
+              onPress={() => router.push("/addCategory")}
+              activeOpacity={0.85}
+            >
+              <View
+                style={[
+                  styles.iconWrapper,
+                  { backgroundColor: "rgba(255,255,255,0.03)" },
+                ]}
+              >
+                <Feather name="plus" size={20} color="rgba(255,255,255,0.4)" />
+              </View>
+              <Text
+                style={[
+                  styles.categoryName,
+                  { color: "rgba(255,255,255,0.4)" },
+                ]}
+                numberOfLines={1}
+              >
+                Add New
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
+
+          <Modal
+            animationType="slide"
+            transparent
+            visible={modalVisible}
+            onRequestClose={closeModal}
+          >
+            <KeyboardAvoidingView
+              style={styles.modalRoot}
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+            >
+              <TouchableOpacity
+                style={styles.modalOverlay}
+                activeOpacity={1}
+                onPress={closeModal}
+              />
+
+              <LinearGradient
+                colors={["#121F38", "#0D1117"]}
+                style={styles.bottomSheetContainer}
+              >
+                <View style={styles.sheetHandle} />
+
+                <View style={styles.modalHeaderRow}>
+                  <View>
+                    <Text style={styles.modalLabel}>Selected Category</Text>
+                    <Text style={styles.modalSelectedTitle}>
+                      {selectedCategory} — {transactionType.toUpperCase()}
+                    </Text>
+                  </View>
+
+                  <TouchableOpacity
+                    style={styles.closeButton}
+                    onPress={closeModal}
+                    activeOpacity={0.8}
+                  >
+                    <Feather name="x" size={20} color="#D1D5DB" />
+                  </TouchableOpacity>
                 </View>
 
-                <View style={styles.fieldsColumnWrapper}>
-                  <TouchableOpacity
-                    style={styles.inputFieldBox}
-                    activeOpacity={0.7}
-                    onPress={() => {
-                      Keyboard.dismiss();
-                      setShow(!show);
-                    }}
-                  >
-                    <View style={styles.inputRow}>
-                      <Feather
-                        name="calendar"
-                        size={16}
-                        color="#2F80ED"
-                        style={{ marginRight: 10 }}
-                      />
-                      <Text style={styles.datePickerTriggerText}>
-                        {dayjs(date, "YYYY/MM/DD").format("DD-MMM-YYYY")}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-
-                  {show && (
-                    <DateTimePicker
-                      value={date}
-                      mode="date"
-                      display="default"
-                      onValueChange={(event, selectedDate) => {
-                        setShow(false);
-                        if (selectedDate) {
-                          setDate(selectedDate);
-                        }
-                      }}
-                    />
-                  )}
-
-                  <View style={[styles.inputFieldBox, { marginTop: 12 }]}>
+                <ScrollView
+                  bounces={false}
+                  showsVerticalScrollIndicator={false}
+                  keyboardShouldPersistTaps="handled"
+                >
+                  <View style={styles.amountInputContainer}>
                     <TextInput
-                      style={styles.fieldInputText}
-                      placeholder="Add description..."
-                      placeholderTextColor="rgba(255,255,255,0.25)"
-                      value={note}
-                      onChangeText={setNote}
-                      multiline
-                      textAlignVertical="top"
+                      ref={amountInputRef}
+                      style={styles.amountTextInput}
+                      placeholder="0.00"
+                      placeholderTextColor="rgba(255,255,255,0.16)"
+                      keyboardType="numeric"
+                      value={amount}
+                      onChangeText={setAmount}
                     />
                   </View>
-                </View>
 
-                <TouchableOpacity
-                  style={commonStyles.primaryButton}
-                  onPress={handleSubmit}
-                  activeOpacity={0.85}
-                  disabled={!amount.trim() || isLoading}
-                >
-                  <Text style={commonStyles.primaryButtonText}>
-                    {isLoading ? "Loading..." : "Save Transaction"}
-                  </Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </LinearGradient>
-          </KeyboardAvoidingView>
-        </Modal>
-      </SafeAreaView>
-    </AppBackground>
+                  <View style={styles.fieldsColumnWrapper}>
+                    <TouchableOpacity
+                      style={styles.inputFieldBox}
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        Keyboard.dismiss();
+                        setShow(!show);
+                      }}
+                    >
+                      <View style={styles.inputRow}>
+                        <Feather
+                          name="calendar"
+                          size={16}
+                          color="#2F80ED"
+                          style={{ marginRight: 10 }}
+                        />
+                        <Text style={styles.datePickerTriggerText}>
+                          {dayjs(date, "YYYY/MM/DD").format("DD-MMM-YYYY")}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+
+                    {show && (
+                      <DateTimePicker
+                        value={date}
+                        mode="date"
+                        display="default"
+                        onValueChange={(event, selectedDate) => {
+                          setShow(false);
+                          if (selectedDate) {
+                            setDate(selectedDate);
+                          }
+                        }}
+                      />
+                    )}
+
+                    <View style={[styles.inputFieldBox, { marginTop: 12 }]}>
+                      <TextInput
+                        style={styles.fieldInputText}
+                        placeholder="Add description..."
+                        placeholderTextColor="rgba(255,255,255,0.25)"
+                        value={note}
+                        onChangeText={setNote}
+                        multiline
+                        textAlignVertical="top"
+                      />
+                    </View>
+                  </View>
+
+                  <TouchableOpacity
+                    style={commonStyles.primaryButton}
+                    onPress={handleSubmit}
+                    activeOpacity={0.85}
+                    disabled={!amount.trim() || isLoading}
+                  >
+                    <Text style={commonStyles.primaryButtonText}>
+                      {isLoading ? "Loading..." : "Save Transaction"}
+                    </Text>
+                  </TouchableOpacity>
+                </ScrollView>
+              </LinearGradient>
+            </KeyboardAvoidingView>
+          </Modal>
+        </SafeAreaView>
+      </AppBackground>
+    </ProtectedRoute>
   );
 }
 
