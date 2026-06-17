@@ -17,16 +17,16 @@ export default function DashboardCard() {
     <View
       style={{
         width: "100%",
-        backgroundColor: "rgba(37, 62, 115, 0.3)",
-        borderRadius: 24,
-        padding: 24,
+        backgroundColor: "rgba(47, 128, 237, 0.15)",
+        borderRadius: 20,
+        padding: 16,
         borderWidth: 1,
-        borderColor: "rgba(255, 255, 255, 0.08)",
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.3,
-        shadowRadius: 20,
-        marginVertical: 15,
+        borderColor: "rgba(47, 128, 237, 0.3)",
+        shadowColor: "#2F80ED",
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.2,
+        shadowRadius: 16,
+        marginVertical: 10,
       }}
     >
       <View
@@ -34,14 +34,14 @@ export default function DashboardCard() {
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: 4,
+          marginBottom: 3,
         }}
       >
         <Text
           style={{
             color: "rgba(255, 255, 255, 0.6)",
-            fontSize: 12,
-            letterSpacing: 1,
+            fontSize: 11,
+            letterSpacing: 0.8,
             textTransform: "uppercase",
             fontFamily: "Poppins-SemiBold",
           }}
@@ -51,9 +51,9 @@ export default function DashboardCard() {
         <View
           style={{
             backgroundColor: "rgba(255, 255, 255, 0.06)",
-            paddingHorizontal: 12,
-            paddingVertical: 6,
-            borderRadius: 12,
+            paddingHorizontal: 10,
+            paddingVertical: 4,
+            borderRadius: 10,
             borderWidth: 1,
             borderColor: "rgba(255, 255, 255, 0.1)",
           }}
@@ -61,8 +61,8 @@ export default function DashboardCard() {
           <Text
             style={{
               color: "rgba(255, 255, 255, 0.8)",
-              fontSize: 11,
-              letterSpacing: 0.5,
+              fontSize: 10,
+              letterSpacing: 0.4,
               fontFamily: "Poppins-Medium",
             }}
           >
@@ -73,13 +73,13 @@ export default function DashboardCard() {
 
       <View
         style={{
-          marginBottom: 14,
+          marginBottom: 10,
         }}
       >
         <Text
           style={{
             color: "#FFFFFF",
-            fontSize: 32,
+            fontSize: 28,
             letterSpacing: -0.5,
             fontFamily: "Poppins-SemiBold",
           }}
@@ -92,7 +92,7 @@ export default function DashboardCard() {
         style={{
           height: 1,
           backgroundColor: "rgba(255, 255, 255, 0.08)",
-          marginBottom: 16,
+          marginBottom: 12,
         }}
       />
 
@@ -107,7 +107,7 @@ export default function DashboardCard() {
         <View
           style={{
             flex: 1,
-            paddingHorizontal: 4,
+            paddingHorizontal: 2,
           }}
         >
           <View
@@ -121,9 +121,9 @@ export default function DashboardCard() {
               style={[
                 {
                   width: 3,
-                  height: 14,
+                  height: 12,
                   borderRadius: 2,
-                  marginRight: 8,
+                  marginRight: 6,
                 },
                 { backgroundColor: "#34C759" },
               ]}
@@ -131,8 +131,8 @@ export default function DashboardCard() {
             <Text
               style={{
                 color: "rgba(255, 255, 255, 0.4)",
-                fontSize: 11,
-                letterSpacing: 0.5,
+                fontSize: 10,
+                letterSpacing: 0.4,
                 fontFamily: "Poppins-SemiBold",
               }}
             >
@@ -142,8 +142,8 @@ export default function DashboardCard() {
           <Text
             style={[
               {
-                fontSize: 18,
-                paddingLeft: 11,
+                fontSize: 16,
+                paddingLeft: 9,
                 fontFamily: "Poppins-SemiBold",
                 color: "#FFFFFF",
               },
@@ -157,9 +157,9 @@ export default function DashboardCard() {
         <View
           style={{
             width: 1,
-            height: 40,
+            height: 36,
             backgroundColor: "rgba(255, 255, 255, 0.08)",
-            marginHorizontal: 15,
+            marginHorizontal: 12,
           }}
         />
 
@@ -167,7 +167,7 @@ export default function DashboardCard() {
         <View
           style={{
             flex: 1,
-            paddingHorizontal: 4,
+            paddingHorizontal: 2,
           }}
         >
           <View
@@ -181,9 +181,9 @@ export default function DashboardCard() {
               style={[
                 {
                   width: 3,
-                  height: 14,
+                  height: 12,
                   borderRadius: 2,
-                  marginRight: 8,
+                  marginRight: 6,
                 },
                 { backgroundColor: "#EB5757" },
               ]}
@@ -191,9 +191,9 @@ export default function DashboardCard() {
             <Text
               style={{
                 color: "rgba(255, 255, 255, 0.4)",
-                fontSize: 11,
+                fontSize: 10,
                 fontFamily: "Poppins-SemiBold",
-                letterSpacing: 0.5,
+                letterSpacing: 0.4,
               }}
             >
               EXPENSES
@@ -202,9 +202,9 @@ export default function DashboardCard() {
           <Text
             style={[
               {
-                fontSize: 18,
+                fontSize: 16,
                 fontFamily: "Poppins-SemiBold",
-                paddingLeft: 11,
+                paddingLeft: 9,
                 color: "#FFA1A1",
               },
             ]}

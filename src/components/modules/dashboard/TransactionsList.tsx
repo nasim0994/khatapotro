@@ -42,12 +42,18 @@ export default function TransactionsList({
     useState<TFormattedTransaction | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
+  const [isAtTop, setIsAtTop] = useState(true);
+
   const handleRefresh = useCallback(async () => {
-    if (!onRefresh) return;
-    setRefreshing(true);
-    await onRefresh();
-    setRefreshing(false);
-  }, [onRefresh]);
+    if (!onRefresh || refreshing) return;
+
+    try {
+      setRefreshing(true);
+      await onRefresh();
+    } finally {
+      setRefreshing(false);
+    }
+  }, [onRefresh, refreshing]);
 
   const TRANSACTION_DATA = useMemo<TTransactionSection[]>(() => {
     const grouped = transactions?.reduce(
@@ -88,8 +94,14 @@ export default function TransactionsList({
     <ScrollView
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
+      scrollEventThrottle={16}
+      onScroll={(event) => {
+        const y = event.nativeEvent.contentOffset.y;
+        setIsAtTop(y <= 0);
+      }}
       refreshControl={
         <RefreshControl
+          enabled={isAtTop}
           refreshing={refreshing}
           onRefresh={handleRefresh}
           tintColor="#2F80ED"
@@ -161,7 +173,7 @@ export default function TransactionsList({
 }
 
 const styles = StyleSheet.create({
-  container: { width: "100%", paddingTop: 10, paddingBottom: 100 },
+  container: { width: "100%", paddingTop: 14, paddingBottom: 100 },
   sectionWrapper: { marginBottom: 24 },
   sectionHeader: {
     color: "#D1D5DB",
