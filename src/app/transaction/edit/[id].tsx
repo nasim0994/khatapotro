@@ -8,6 +8,7 @@ import {
 } from "@/redux/features/transactionApi";
 import { TCategory } from "@/types/categoryTypes";
 import { renderIcon } from "@/utils/renderIcon";
+import { useSuccessSound } from "@/utils/useSuccessSound";
 import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -30,6 +31,7 @@ import Toast from "react-native-toast-message";
 export default function EditTransaction() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const { playSuccessSound } = useSuccessSound();
 
   const { data: transData, isLoading: isTransLoading } =
     useGetTransactionByIdQuery(id, { skip: !id });
@@ -85,6 +87,7 @@ export default function EditTransaction() {
       };
 
       await updateTransaction({ id, data: updatedBody }).unwrap();
+      playSuccessSound();
       Toast.show({
         type: "success",
         text2: "Transaction updated successfully!",

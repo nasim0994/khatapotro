@@ -5,7 +5,7 @@ import TransactionsList from "@/components/modules/dashboard/TransactionsList";
 import { useGetAllTransactionQuery } from "@/redux/features/transactionApi";
 import { useAppSelector } from "@/redux/hooks";
 import { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Dashboard() {
@@ -25,7 +25,7 @@ export default function Dashboard() {
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const { data } = useGetAllTransactionQuery({
+  const { data, refetch } = useGetAllTransactionQuery({
     user: loggedUser?._id,
     startDate,
     endDate,
@@ -35,23 +35,22 @@ export default function Dashboard() {
 
   return (
     <AppBackground>
-      <SafeAreaView>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{ padding: 10 }}>
-            {/* card */}
-            <DashboardCard />
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ padding: 10, flex: 1 }}>
+          <DashboardCard />
 
-            <CategorySlider
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-            />
+          <CategorySlider
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
 
-            {/* transactions */}
-            {transactions?.length > 0 && (
-              <TransactionsList transactions={transactions} />
-            )}
-          </View>
-        </ScrollView>
+          <TransactionsList
+            transactions={transactions}
+            onRefresh={async () => {
+              await refetch();
+            }}
+          />
+        </View>
       </SafeAreaView>
     </AppBackground>
   );

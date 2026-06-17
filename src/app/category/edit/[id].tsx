@@ -7,6 +7,7 @@ import {
   useUpdateCategoryMutation,
 } from "@/redux/features/categoryApi";
 import { renderIcon } from "@/utils/renderIcon";
+import { useSuccessSound } from "@/utils/useSuccessSound";
 import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -27,6 +28,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function EditCategory() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const { playSuccessSound } = useSuccessSound();
 
   const { data, isLoading } = useGetCategoryByIdQuery(id, { skip: !id });
   const [updateCategory, { isLoading: isUpdating }] =
@@ -71,6 +73,7 @@ export default function EditCategory() {
       };
 
       await updateCategory({ id, data: updatedBody }).unwrap();
+      playSuccessSound();
       router.back();
     } catch (error) {
       console.error(error);

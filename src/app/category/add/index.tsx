@@ -6,9 +6,11 @@ import { AVAILABLE_ICONS } from "@/data/categories";
 import { useAddCategoryMutation } from "@/redux/features/categoryApi";
 import { useAppSelector } from "@/redux/hooks";
 import { renderIcon } from "@/utils/renderIcon";
+import { useSuccessSound } from "@/utils/useSuccessSound";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useRef, useState } from "react";
 import {
   Keyboard,
@@ -32,10 +34,15 @@ type SelectedIconType = {
 };
 
 export default function AddCategoryScreen() {
+  const { type } = useLocalSearchParams();
   const { loggedUser } = useAppSelector((state: any) => state.auth);
   const router = useRouter();
+  const { playSuccessSound } = useSuccessSound();
+
   const [transactionType, setTransactionType] = useState<"expense" | "income">(
-    "expense",
+    (type === "income" || type === "expense" ? type : "expense") as
+      | "expense"
+      | "income",
   );
   const [modalVisible, setModalVisible] = useState(false);
   const [categoryName, setCategoryName] = useState("");
@@ -70,6 +77,7 @@ export default function AddCategoryScreen() {
     try {
       const res = await addCategory(data).unwrap();
       if (res?.success) {
+        playSuccessSound();
         Toast.show({
           type: "success",
           text2: res?.message,
@@ -250,10 +258,10 @@ export default function AddCategoryScreen() {
                 >
                   {/* Category Name Input Field */}
                   <View style={styles.fieldsColumnWrapper}>
-                    <View style={styles.inputFieldBox}>
+                    <View style={commonStyles.inputFieldBox}>
                       <TextInput
                         ref={nameInputRef}
-                        style={styles.fieldInputText}
+                        style={commonStyles.fieldInputText}
                         placeholder="Enter category name..."
                         placeholderTextColor="rgba(255,255,255,0.25)"
                         value={categoryName}
@@ -270,17 +278,7 @@ export default function AddCategoryScreen() {
                     activeOpacity={0.85}
                     disabled={!categoryName.trim() || isLoading}
                   >
-                    <Text
-                      style={[
-                        styles.modalSaveButtonText,
-                        {
-                          color:
-                            transactionType === "expense"
-                              ? "#FFFFFF"
-                              : "#06110A",
-                        },
-                      ]}
-                    >
+                    <Text style={[commonStyles.primaryButtonText]}>
                       {isLoading ? "Loading..." : "Add Category"}
                     </Text>
                   </TouchableOpacity>
@@ -327,7 +325,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#EB5757",
   },
   activeIncomeTab: {
-    backgroundColor: "#34C759",
+    backgroundColor: "#2F80ED",
   },
   typeTabText: {
     color: "#D1D5DB",
@@ -436,30 +434,5 @@ const styles = StyleSheet.create({
   fieldsColumnWrapper: {
     flexDirection: "column",
     marginVertical: 16,
-  },
-  inputFieldBox: {
-    backgroundColor: "rgba(255, 255, 255, 0.04)",
-    borderRadius: 14,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.07)",
-  },
-  fieldInputText: {
-    color: "#FFFFFF",
-    fontSize: 15,
-    fontFamily: "Poppins-Medium",
-    flex: 1,
-  },
-  modalSaveButton: {
-    borderRadius: 18,
-    paddingVertical: 16,
-    alignItems: "center",
-    marginTop: 4,
-    marginBottom: 12,
-  },
-  modalSaveButtonText: {
-    fontSize: 15,
-    fontFamily: "Poppins-Bold",
   },
 });

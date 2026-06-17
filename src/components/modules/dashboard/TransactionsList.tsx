@@ -2,8 +2,15 @@ import { TCategory } from "@/types/categoryTypes";
 import { TTransaction } from "@/types/transactionType";
 import { renderIcon } from "@/utils/renderIcon";
 import dayjs from "dayjs";
-import { useMemo, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useCallback, useMemo, useState } from "react";
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import TransactionListActionModal from "../transaction/TransactionListActionModal";
 
 export type TFormattedTransaction = {
@@ -23,14 +30,24 @@ type TTransactionSection = {
 
 interface TransactionsListProps {
   transactions: TTransaction[];
+  onRefresh?: () => Promise<void>;
 }
 
 export default function TransactionsList({
   transactions,
+  onRefresh,
 }: TransactionsListProps) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [selectedItem, setSelectedItem] =
     useState<TFormattedTransaction | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    if (!onRefresh) return;
+    setRefreshing(true);
+    await onRefresh();
+    setRefreshing(false);
+  }, [onRefresh]);
 
   const TRANSACTION_DATA = useMemo<TTransactionSection[]>(() => {
     const grouped = transactions?.reduce(
@@ -68,12 +85,23 @@ export default function TransactionsList({
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          tintColor="#2F80ED"
+          colors={["#2F80ED"]}
+          progressBackgroundColor="rgba(22, 27, 38, 0.95)"
+        />
+      }
+    >
       {TRANSACTION_DATA?.map((section) => (
         <View key={section?.date} style={styles.sectionWrapper}>
           <Text style={styles.sectionHeader}>{section?.date}</Text>
 
-          {/* TRANSACTION ITEMS */}
           {section.data.map((item, itemIdx: number) => {
             const isExpense = item.type === "expense";
 
@@ -94,7 +122,6 @@ export default function TransactionsList({
                     })}
                   </View>
 
-                  {/* MIDDLE: Title & Subtitle */}
                   <View style={styles.textContainer}>
                     <Text style={styles.mainTitle} numberOfLines={1}>
                       {item?.note || "No description"}
@@ -102,7 +129,6 @@ export default function TransactionsList({
                     <Text style={styles.subTitle}>{item.category?.name}</Text>
                   </View>
 
-                  {/* RIGHT: Amount */}
                   <View style={styles.rightContainer}>
                     <Text
                       style={[
@@ -130,12 +156,12 @@ export default function TransactionsList({
         selectedItem={selectedItem}
         setSelectedItem={setSelectedItem}
       />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { width: "100%", paddingTop: 10 },
+  container: { width: "100%", paddingTop: 10, paddingBottom: 100 },
   sectionWrapper: { marginBottom: 24 },
   sectionHeader: {
     color: "#D1D5DB",

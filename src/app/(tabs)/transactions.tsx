@@ -70,7 +70,7 @@ export default function AllTransactions() {
   const startDate = startDateObj.toISOString();
   const endDate = endDateObj.toISOString();
 
-  const { data: transactionData } = useGetAllTransactionQuery({
+  const { data: transactionData, refetch } = useGetAllTransactionQuery({
     user: loggedUser?._id,
     type: activeTab !== "all" ? activeTab : undefined,
     category: selectedCategory?._id,
@@ -191,7 +191,12 @@ export default function AllTransactions() {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20 }}
           >
-            <TransactionsList transactions={transactions} />
+            <TransactionsList
+              transactions={transactions}
+              onRefresh={async () => {
+                await refetch();
+              }}
+            />
           </ScrollView>
         )}
 

@@ -7,9 +7,11 @@ import { useGetAllCategoryQuery } from "@/redux/features/categoryApi";
 import { useAddTransactionMutation } from "@/redux/features/transactionApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TCategory } from "@/types/categoryTypes";
+import { useSuccessSound } from "@/utils/useSuccessSound";
 import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
+
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
@@ -31,6 +33,8 @@ import Toast from "react-native-toast-message";
 export default function AddTransactionScreen() {
   const router = useRouter();
   const { loggedUser } = useAppSelector((state: any) => state.auth);
+  const { playSuccessSound } = useSuccessSound();
+
   const [transactionType, setTransactionType] = useState<"expense" | "income">(
     "expense",
   );
@@ -82,6 +86,8 @@ export default function AddTransactionScreen() {
     try {
       const res = await addTransaction(data).unwrap();
       if (res?.success) {
+        playSuccessSound();
+
         Toast.show({
           type: "success",
           text2: res?.message,
@@ -96,6 +102,7 @@ export default function AddTransactionScreen() {
         setSelectedCategory(null);
         setDate(new Date());
         closeModal();
+
         router.push("/dashboard");
       }
     } catch (err: any) {
@@ -178,7 +185,12 @@ export default function AddTransactionScreen() {
 
             <TouchableOpacity
               style={[styles.categoryCard, styles.addNewCategoryCard]}
-              onPress={() => router.push("/category/add" as any)}
+              onPress={() =>
+                router.push({
+                  pathname: "/category/add" as any,
+                  params: { type: transactionType },
+                })
+              }
               activeOpacity={0.85}
             >
               <View
@@ -260,7 +272,7 @@ export default function AddTransactionScreen() {
 
                   <View style={styles.fieldsColumnWrapper}>
                     <TouchableOpacity
-                      style={styles.inputFieldBox}
+                      style={commonStyles.inputFieldBox}
                       activeOpacity={0.7}
                       onPress={() => {
                         Keyboard.dismiss();
@@ -294,9 +306,11 @@ export default function AddTransactionScreen() {
                       />
                     )}
 
-                    <View style={[styles.inputFieldBox, { marginTop: 12 }]}>
+                    <View
+                      style={[commonStyles.inputFieldBox, { marginTop: 12 }]}
+                    >
                       <TextInput
-                        style={styles.fieldInputText}
+                        style={commonStyles.fieldInputText}
                         placeholder="Add description..."
                         placeholderTextColor="rgba(255,255,255,0.25)"
                         value={note}
@@ -456,16 +470,7 @@ const styles = StyleSheet.create({
   },
   fieldsColumnWrapper: { flexDirection: "column", marginVertical: 16 },
 
-  inputFieldBox: {
-    backgroundColor: "rgba(255, 255, 255, 0.04)",
-    borderRadius: 14,
-    paddingHorizontal: 13,
-    paddingVertical: 14,
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.07)",
-  },
   inputRow: { flexDirection: "row", alignItems: "center" },
-  fieldInputText: { color: "#FFFFFF", flex: 1 },
 
   datePickerTriggerText: {
     color: "#FFFFFF",

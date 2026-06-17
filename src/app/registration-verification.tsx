@@ -1,9 +1,12 @@
 import AppBackground from "@/components/AppBackground";
+import BackBtn from "@/components/BackBtn";
 import { commonStyles } from "@/constants/style";
 import {
   useRegisterVerificationUserMutation,
   useResentOtpMutation,
 } from "@/redux/features/auth/authApi";
+import { userLoggedIn } from "@/redux/slices/authSlice";
+import { verifyToken } from "@/utils/verifyToken";
 import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -17,14 +20,15 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import { useDispatch } from "react-redux";
 
 export default function RegistrationVerification() {
   const { email } = useLocalSearchParams();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(59);
-  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -67,7 +71,11 @@ export default function RegistrationVerification() {
           autoHide: true,
         });
 
-        router.push("/login");
+        const token = res?.data;
+        const user = verifyToken(token);
+        dispatch(userLoggedIn({ token, user }));
+
+        router.push("/(tabs)/dashboard");
       }
     } catch (err: any) {
       const firstErrorMessage =
@@ -127,12 +135,7 @@ export default function RegistrationVerification() {
     <AppBackground>
       <SafeAreaView style={styles.container}>
         <View style={{ marginTop: 20 }} />
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Feather name="arrow-left" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
+        <BackBtn />
 
         <View style={styles.headerContainer}>
           <Text style={styles.title}>Verification Code</Text>
@@ -164,8 +167,6 @@ export default function RegistrationVerification() {
             placeholderTextColor="rgba(255, 255, 255, 0.25)"
             textAlign="center"
             secureTextEntry={false}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
           />
         </View>
 
