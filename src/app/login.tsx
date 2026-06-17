@@ -78,48 +78,54 @@ export default function LoginScreen() {
 
   return (
     <AppBackground>
-      <SafeAreaView className="flex-1">
-        <View className="flex-1 px-6 justify-between pt-4 pb-8">
-          <View>
-            <BackBtn />
+      <SafeAreaView className="flex-1 px-6 justify-between pt-4">
+        <View>
+          <BackBtn />
 
-            {/* TYPOGRAPHY SECTION */}
-            <View className="mt-8 space-y-2">
-              <Text className="text-white text-[32px] font-bold tracking-tight">
-                Welcome Back
-              </Text>
-              <Text className="text-gray-300 text-sm mt-1">
-                Log in to your account to monitor your expenses
-              </Text>
+          {/* TYPOGRAPHY SECTION */}
+          <View className="mt-8 space-y-2">
+            <Text
+              className="text-white text-[32px]  tracking-tight"
+              style={commonStyles.fontMedium}
+            >
+              Welcome Back
+            </Text>
+            <Text
+              className="text-gray-300 text-sm mt-1"
+              style={commonStyles.fontRegular}
+            >
+              Log in to your account to monitor your expenses
+            </Text>
+          </View>
+
+          {/* FORM INPUTS SECTION */}
+          <View style={{ marginTop: 30, gap: 14 }}>
+            {/* EMAIL INPUT */}
+            <View style={[commonStyles.inputFieldBox]}>
+              <Feather name="at-sign" size={18} color="#ccc" />
+              <TextInput
+                placeholder="Enter your email"
+                placeholderTextColor="#ccc"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={email}
+                onChangeText={setEmail}
+                style={commonStyles.fieldInputText}
+              />
             </View>
 
-            {/* FORM INPUTS SECTION */}
-            <View className="mt-10 space-y-4">
-              {/* EMAIL INPUT */}
-              <View className="flex-row items-center bg-white/20 border border-white/10 rounded-2xl px-4 py-3.5 mb-4">
-                <Feather name="at-sign" size={18} color="#ccc" />
-                <TextInput
-                  className="flex-1 text-white ml-3 text-base"
-                  placeholder="Enter your email"
-                  placeholderTextColor="#ccc"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  value={email}
-                  onChangeText={setEmail}
-                />
-              </View>
-
-              {/* PASSWORD INPUT */}
-              <View className="flex-row items-center bg-white/20 border border-white/10 rounded-2xl px-4 py-3.5">
+            {/* PASSWORD INPUT */}
+            <View>
+              <View style={[commonStyles.inputFieldBox]}>
                 <Feather name="lock" size={18} color="#ccc" />
                 <TextInput
-                  className="flex-1 text-white ml-3 text-base"
                   placeholder="Enter your password"
                   placeholderTextColor="#ccc"
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
                   value={password}
                   onChangeText={setPassword}
+                  style={[commonStyles.fieldInputText]}
                 />
                 <TouchableOpacity
                   onPress={() => setShowPassword(!showPassword)}
@@ -133,34 +139,44 @@ export default function LoginScreen() {
               </View>
 
               {/* FORGOT PASSWORD */}
-              <TouchableOpacity className="align-self-end mt-2">
-                <Text className="text-[#4D96FF] text-right text-xs font-semibold">
+              <Link href="/forgot-password" style={{ marginTop: 8 }}>
+                <Text
+                  className="text-primary text-right text-xs"
+                  style={[commonStyles.fontMedium]}
+                >
                   Forgot Password?
+                </Text>
+              </Link>
+            </View>
+
+            {/* BUTTON & FOOTER SECTION */}
+            <View>
+              <TouchableOpacity
+                activeOpacity={0.85}
+                style={commonStyles.primaryButton}
+                onPress={handleSubmit}
+                disabled={isLoading}
+              >
+                <Text style={commonStyles.primaryButtonText}>
+                  {isLoading ? "Loading..." : "Log in"}
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
 
-          {/* BUTTON & FOOTER SECTION */}
-          <View className="space-y-6">
-            <TouchableOpacity
-              activeOpacity={0.85}
-              style={commonStyles.primaryButton}
-              onPress={handleSubmit}
-              disabled={isLoading}
-            >
-              <Text style={commonStyles.primaryButtonText}>
-                {isLoading ? "Loading..." : "Log in"}
-              </Text>
-            </TouchableOpacity>
-
-            {/* REDIRECT TO SIGN UP */}
-            <View className="flex-row justify-center items-center mt-4">
-              <Text className="text-gray-300 text-sm">
+            <View className="flex-row justify-center items-center">
+              <Text
+                className="text-gray-300 text-sm"
+                style={[commonStyles.fontRegular]}
+              >
                 Don't have an account?{" "}
               </Text>
               <Link href="/signup">
-                <Text className="text-primary text-sm font-bold">Sign Up</Text>
+                <Text
+                  className="text-primary text-sm"
+                  style={[commonStyles.fontRegular]}
+                >
+                  Sign Up
+                </Text>
               </Link>
             </View>
           </View>

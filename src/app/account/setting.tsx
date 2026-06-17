@@ -349,7 +349,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
   },
-  headerTitle: { color: "#FFFFFF", fontSize: 18, fontWeight: "700" },
+  headerTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontFamily: "Poppins-SemiBold",
+  },
 
   sectionCard: {
     backgroundColor: "rgba(255, 255, 255, 0.02)",
@@ -362,7 +366,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 20,
   },
 
@@ -370,7 +374,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     color: "rgba(255,255,255,0.4)",
     fontSize: 12,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
     marginBottom: 8,
     letterSpacing: 0.5,
     textTransform: "uppercase",
@@ -385,7 +389,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
   },
-  textInput: { flex: 1, color: "#FFFFFF", fontSize: 14, fontWeight: "500" },
+  textInput: {
+    flex: 1,
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontFamily: "Poppins-Regular",
+  },
 
   submitButton: {
     width: "100%",
@@ -396,12 +405,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 8,
   },
-  submitButtonText: { color: "#FFFFFF", fontSize: 14, fontWeight: "700" },
+  submitButtonText: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontFamily: "Poppins-SemiBold",
+  },
 
   dangerDescription: {
     color: "rgba(255,255,255,0.4)",
     fontSize: 13,
-    fontWeight: "500",
+    fontFamily: "Poppins-Regular",
     lineHeight: 18,
     marginBottom: 20,
   },
@@ -416,7 +429,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(235, 87, 87, 0.2)",
   },
-  deleteZoneButtonText: { color: "#EB5757", fontSize: 14, fontWeight: "700" },
+  deleteZoneButtonText: {
+    color: "#EB5757",
+    fontSize: 14,
+    fontFamily: "Poppins-SemiBold",
+  },
 
   modalOverlay: {
     flex: 1,
@@ -446,7 +463,7 @@ const styles = StyleSheet.create({
   modalHeaderTitle: {
     color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 8,
   },
   modalDescription: {
@@ -456,7 +473,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginBottom: 20,
   },
-  boldMatchText: { color: "#EB5757", fontWeight: "700" },
+  boldMatchText: { color: "#EB5757", fontFamily: "Poppins-SemiBold" },
   modalInputBox: {
     width: "100%",
     backgroundColor: "rgba(0,0,0,0.2)",
@@ -471,7 +488,7 @@ const styles = StyleSheet.create({
     flex: 1,
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
     textAlign: "center",
     letterSpacing: 1,
   },
@@ -486,7 +503,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
   },
-  cancelButtonText: { color: "#D1D5DB", fontSize: 14, fontWeight: "600" },
+  cancelButtonText: {
+    color: "#D1D5DB",
+    fontSize: 14,
+    fontFamily: "Poppins-Medium",
+  },
   confirmDeleteButton: {
     flex: 1,
     height: 46,
@@ -499,6 +520,6 @@ const styles = StyleSheet.create({
   confirmDeleteButtonText: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
   },
 });

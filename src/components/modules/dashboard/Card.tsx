@@ -41,9 +41,9 @@ export default function DashboardCard() {
           style={{
             color: "rgba(255, 255, 255, 0.6)",
             fontSize: 12,
-            fontWeight: "700",
             letterSpacing: 1,
             textTransform: "uppercase",
+            fontFamily: "Poppins-SemiBold",
           }}
         >
           Balance
@@ -62,8 +62,8 @@ export default function DashboardCard() {
             style={{
               color: "rgba(255, 255, 255, 0.8)",
               fontSize: 11,
-              fontWeight: "600",
               letterSpacing: 0.5,
+              fontFamily: "Poppins-Medium",
             }}
           >
             {dayjs(balance?.month, "MM-YYYY").format("MMM-YYYY")}
@@ -80,8 +80,8 @@ export default function DashboardCard() {
           style={{
             color: "#FFFFFF",
             fontSize: 32,
-            fontWeight: "700",
             letterSpacing: -0.5,
+            fontFamily: "Poppins-SemiBold",
           }}
         >
           {balance?.balance || 0}
@@ -132,8 +132,8 @@ export default function DashboardCard() {
               style={{
                 color: "rgba(255, 255, 255, 0.4)",
                 fontSize: 11,
-                fontWeight: "700",
                 letterSpacing: 0.5,
+                fontFamily: "Poppins-SemiBold",
               }}
             >
               INCOME
@@ -143,10 +143,10 @@ export default function DashboardCard() {
             style={[
               {
                 fontSize: 18,
-                fontWeight: "700",
                 paddingLeft: 11,
+                fontFamily: "Poppins-SemiBold",
+                color: "#FFFFFF",
               },
-              { color: "#FFFFFF" },
             ]}
           >
             +{balance?.income || 0}
@@ -192,7 +192,7 @@ export default function DashboardCard() {
               style={{
                 color: "rgba(255, 255, 255, 0.4)",
                 fontSize: 11,
-                fontWeight: "700",
+                fontFamily: "Poppins-SemiBold",
                 letterSpacing: 0.5,
               }}
             >
@@ -203,10 +203,10 @@ export default function DashboardCard() {
             style={[
               {
                 fontSize: 18,
-                fontWeight: "700",
+                fontFamily: "Poppins-SemiBold",
                 paddingLeft: 11,
+                color: "#FFA1A1",
               },
-              { color: "#FFA1A1" },
             ]}
           >
             -{balance?.expense || 0}

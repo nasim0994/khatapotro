@@ -6,9 +6,8 @@ import {
 } from "@/redux/features/auth/authApi";
 import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Dimensions,
   Keyboard,
   StyleSheet,
   Text,
@@ -19,19 +18,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
-const SCREEN_WIDTH = Dimensions.get("window").width;
-const CONTAINER_PADDING = 48;
-const TOTAL_GAPS = 40;
-const OTP_INPUT_WIDTH = (SCREEN_WIDTH - CONTAINER_PADDING - TOTAL_GAPS) / 6;
-
 export default function RegistrationVerification() {
   const { email } = useLocalSearchParams();
   const router = useRouter();
 
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(59);
-
-  const inputRefs = useRef<Array<TextInput | null>>([]);
+  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,41 +33,11 @@ export default function RegistrationVerification() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleOtpChange = (value: string, index: number) => {
-    const cleanValue = value.replace(/[^0-9]/g, "");
-
-    if (cleanValue.length > 1) {
-      const pastedOtp = cleanValue.slice(0, 6).split("");
-      const newOtp = [...otp];
-
-      for (let i = 0; i < 6; i++) {
-        if (index + i < 6 && pastedOtp[i]) {
-          newOtp[index + i] = pastedOtp[i];
-        }
-      }
-
-      setOtp(newOtp);
-
-      const nextFocusIndex = Math.min(index + cleanValue.length - 1, 5);
-      inputRefs.current[nextFocusIndex]?.focus();
-      if (newOtp.join("").length === 6) {
-        Keyboard.dismiss();
-      }
-      return;
-    }
-
-    const newOtp = [...otp];
-    newOtp[index] = cleanValue;
-    setOtp(newOtp);
-
-    if (cleanValue && index < 5) {
-      inputRefs.current[index + 1]?.focus();
-    }
-  };
-
-  const handleKeyPress = (e: any, index: number) => {
-    if (e.nativeEvent.key === "Backspace" && !otp[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus();
+  const handleOtpChange = (value: string) => {
+    const cleanValue = value.replace(/[^0-9]/g, "").slice(0, 6);
+    setOtp(cleanValue);
+    if (cleanValue.length === 6) {
+      Keyboard.dismiss();
     }
   };
 
@@ -82,8 +45,7 @@ export default function RegistrationVerification() {
     useRegisterVerificationUserMutation();
 
   const handleSubmit = async () => {
-    const fullOtp = otp.join("");
-    if (fullOtp.length < 6) {
+    if (otp.length < 6) {
       alert("Please enter all 6 digits");
       return;
     }
@@ -91,7 +53,7 @@ export default function RegistrationVerification() {
 
     const data = {
       email,
-      otp: fullOtp,
+      otp: otp,
     };
 
     try {
@@ -125,9 +87,7 @@ export default function RegistrationVerification() {
 
   const [resentOtp, { isLoading: reOtpLoading }] = useResentOtpMutation();
   const handleResend = async () => {
-    const data = {
-      email,
-    };
+    const data = { email };
 
     try {
       const res = await resentOtp(data).unwrap();
@@ -142,9 +102,10 @@ export default function RegistrationVerification() {
 
         if (timer === 0) {
           setTimer(59);
-          setOtp(["", "", "", "", "", ""]);
-          inputRefs.current[0]?.focus();
+          setOtp("");
         }
+
+        // auto login
       }
     } catch (err: any) {
       const firstErrorMessage =
@@ -192,31 +153,27 @@ export default function RegistrationVerification() {
           </View>
         </View>
 
-        <View style={styles.otpContainer}>
-          {otp.map((digit, index) => (
-            <TextInput
-              key={index}
-              ref={(ref) => {
-                inputRefs.current[index] = ref;
-              }}
-              style={[styles.otpInput, digit ? styles.otpInputActive : null]}
-              keyboardType="number-pad"
-              maxLength={1}
-              value={digit}
-              onChangeText={(value) => handleOtpChange(value, index)}
-              onKeyPress={(e) => handleKeyPress(e, index)}
-              placeholder="0"
-              placeholderTextColor="rgba(255, 255, 255, 0.15)"
-              textAlign="center"
-            />
-          ))}
+        <View style={commonStyles.inputFieldBox}>
+          <TextInput
+            style={commonStyles.fieldInputText}
+            keyboardType="number-pad"
+            maxLength={6}
+            value={otp}
+            onChangeText={handleOtpChange}
+            placeholder="Enter 6-digit code"
+            placeholderTextColor="rgba(255, 255, 255, 0.25)"
+            textAlign="center"
+            secureTextEntry={false}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+          />
         </View>
 
         <View style={styles.timerContainer}>
           {timer > 0 ? (
             <Text style={styles.timerText}>
               Resend code in{" "}
-              <Text style={{ color: "#34C759", fontWeight: "600" }}>
+              <Text style={{ color: "#34C759", fontFamily: "Poppins-Medium" }}>
                 0:{timer < 10 ? `0${timer}` : timer}
               </Text>
             </Text>
@@ -264,7 +221,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     color: "#FFFFFF",
     marginBottom: 16,
   },
@@ -285,52 +242,48 @@ const styles = StyleSheet.create({
   },
   emailHighlight: {
     color: "#FFFFFF",
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
   },
   boldText: {
     color: "#34C759",
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
   },
-  otpContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 30,
+
+  inputWrapper: {
+    marginVertical: 40,
     width: "100%",
   },
-  otpInput: {
-    width: OTP_INPUT_WIDTH,
-    height: OTP_INPUT_WIDTH * 1.18,
+  normalInput: {
+    width: "100%",
+    height: 56,
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.08)",
-    borderRadius: 12,
-    fontSize: 22,
-    fontWeight: "700",
+    borderRadius: 14,
+    fontSize: 18,
+    fontFamily: "Poppins-SemiBold",
     color: "#FFFFFF",
-    padding: 0,
-
-    textAlign: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    includeFontPadding: false,
+    letterSpacing: 4,
+    paddingHorizontal: 16,
   },
-  otpInputActive: {
+  normalInputActive: {
     borderColor: "#34C759",
     backgroundColor: "rgba(52, 199, 89, 0.02)",
   },
   timerContainer: {
     alignItems: "center",
-    marginBottom: 40,
+    marginTop: 10,
+    marginBottom: 20,
   },
   timerText: {
     fontSize: 14,
     color: "rgba(255, 255, 255, 0.4)",
-    fontWeight: "500",
+    fontFamily: "Poppins-Regular",
   },
   resendText: {
     fontSize: 14,
     color: "#34C759",
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
     textDecorationLine: "underline",
   },
 });

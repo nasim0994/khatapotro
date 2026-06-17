@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: "#FFFFFF",
     fontSize: 20,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
   },
   monthSelector: {
     flexDirection: "row",
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
   monthSelectorText: {
     color: "#FFFFFF",
     fontSize: 12,
-    fontWeight: "600",
+    fontFamily: "Poppins-SemiBold",
   },
   tabContainer: {
     flexDirection: "row",
@@ -295,15 +295,15 @@ const styles = StyleSheet.create({
   tabText: {
     color: "#D1D5DB",
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: "Poppins-SemiBold",
   },
   activeTabText: {
     color: "#FFFFFF",
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
   },
   activeIncomeText: {
     color: "#06110A",
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
   },
   chartCard: {
     backgroundColor: "rgba(255, 255, 255, 0.03)",
@@ -319,18 +319,18 @@ const styles = StyleSheet.create({
   chartTitle: {
     color: "rgba(255, 255, 255, 0.4)",
     fontSize: 13,
-    fontWeight: "600",
+    fontFamily: "Poppins-SemiBold",
   },
   chartTotalAmount: {
     color: "#FFFFFF",
     fontSize: 28,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     marginTop: 4,
   },
   sectionLabel: {
     color: "rgba(255, 255, 255, 0.4)",
     fontSize: 12,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     textTransform: "uppercase",
     marginBottom: 12,
     letterSpacing: 0.5,
@@ -368,12 +368,12 @@ const styles = StyleSheet.create({
   categoryNameText: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
   },
   categoryAmountText: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
   },
   progressBarTrack: {
     height: 6,
@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
   stateText: {
     color: "rgba(255, 255, 255, 0.4)",
     fontSize: 14,
-    fontWeight: "500",
+    fontFamily: "Poppins-Regular",
   },
   modalOverlay: {
     flex: 1,
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 10,
     textAlign: "center",
   },

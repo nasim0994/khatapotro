@@ -228,7 +228,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
   },
-  headerTitle: { color: "#FFFFFF", fontSize: 18, fontWeight: "700" },
+  headerTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontFamily: "Poppins-SemiBold",
+  },
 
   avatarSection: { alignItems: "center", marginVertical: 24 },
   avatarWrapper: { width: 88, height: 88, position: "relative" },
@@ -267,7 +271,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     color: "rgba(255,255,255,0.4)",
     fontSize: 12,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
     marginBottom: 10,
     letterSpacing: 0.5,
     textTransform: "uppercase",
@@ -302,7 +306,7 @@ const styles = StyleSheet.create({
   genderText: {
     color: "rgba(255,255,255,0.4)",
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
   },
   activeGenderText: { color: "#2F80ED" },
 
@@ -315,5 +319,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 15,
   },
-  submitButtonText: { color: "#FFFFFF", fontSize: 16, fontWeight: "700" },
+  submitButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontFamily: "Poppins-SemiBold",
+  },
 });

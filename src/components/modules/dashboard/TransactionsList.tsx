@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     color: "#D1D5DB",
     fontSize: 11,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     letterSpacing: 1.2,
     marginBottom: 8,
     opacity: 0.5,
@@ -164,15 +164,20 @@ const styles = StyleSheet.create({
   mainTitle: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
     letterSpacing: 0.5,
     marginBottom: 3,
   },
-  subTitle: { color: "#D1D5DB", fontSize: 12, fontWeight: "500", opacity: 0.4 },
+  subTitle: {
+    color: "#D1D5DB",
+    fontSize: 12,
+    fontFamily: "Poppins-Regular",
+    opacity: 0.4,
+  },
   rightContainer: { alignItems: "flex-end" },
   amountText: {
     fontSize: 15,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     letterSpacing: -0.3,
     marginBottom: 3,
   },

@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     fontSize: 13,
-    fontWeight: "600",
     letterSpacing: 0.2,
+    fontFamily: "Poppins-SemiBold",
   },
 });

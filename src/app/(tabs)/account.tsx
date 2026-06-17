@@ -18,13 +18,6 @@ export default function AccountScreen() {
   const route = useRouter();
   const { loggedUser } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const user = {
-    avatar:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
-    balance: "$12,450.00",
-    income: "$4,500.00",
-    expense: "$1,250.00",
-  };
 
   return (
     <AppBackground>
@@ -40,13 +33,6 @@ export default function AccountScreen() {
                 source={require("@/assets/images/user.png")}
                 style={styles.avatar}
               />
-              {/* <TouchableOpacity
-                style={styles.avatarEditBtn}
-                activeOpacity={0.85}
-                onPress={() => console.log("Edit Avatar")}
-              >
-                <Feather name="camera" size={14} color="#000000" />
-              </TouchableOpacity> */}
             </View>
 
             <Text style={styles.userName}>{loggedUser?.name}</Text>
@@ -219,7 +205,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
   },
   scrollContent: {
     paddingBottom: 40,
@@ -259,13 +245,13 @@ const styles = StyleSheet.create({
   userName: {
     color: "#FFFFFF",
     fontSize: 20,
-    fontWeight: "800",
+    fontFamily: "Poppins-Bold",
     marginBottom: 4,
   },
   userId: {
     color: "rgba(255, 255, 255, 0.4)",
     fontSize: 13,
-    fontWeight: "500",
+    fontFamily: "Poppins-Medium",
     marginBottom: 16,
   },
   editProfileBtn: {
@@ -281,7 +267,7 @@ const styles = StyleSheet.create({
   editProfileBtnText: {
     color: "#FFFFFF",
     fontSize: 12,
-    fontWeight: "600",
+    fontFamily: "Poppins-SemiBold",
   },
   statsCard: {
     borderRadius: 20,
@@ -297,7 +283,7 @@ const styles = StyleSheet.create({
   statLabel: {
     color: "rgba(255, 255, 255, 0.4)",
     fontSize: 11,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     textTransform: "uppercase",
     letterSpacing: 0.5,
     marginBottom: 4,
@@ -305,7 +291,7 @@ const styles = StyleSheet.create({
   statValue: {
     color: "#FFFFFF",
     fontSize: 26,
-    fontWeight: "800",
+    fontFamily: "Poppins-SemiBold",
   },
   divider: {
     height: 1,
@@ -334,12 +320,12 @@ const styles = StyleSheet.create({
   miniLabel: {
     color: "rgba(255, 255, 255, 0.35)",
     fontSize: 10,
-    fontWeight: "600",
+    fontFamily: "Poppins-Bold",
   },
   miniValue: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
   },
   menuContainer: {
     width: "100%",
@@ -348,7 +334,7 @@ const styles = StyleSheet.create({
   menuGroupTitle: {
     color: "rgba(255, 255, 255, 0.3)",
     fontSize: 11,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     textTransform: "uppercase",
     letterSpacing: 1,
     marginBottom: 12,
@@ -383,7 +369,7 @@ const styles = StyleSheet.create({
   menuItemText: {
     color: "#D1D5DB",
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: "Poppins-SemiBold",
   },
   logoutItem: {
     backgroundColor: "rgba(235, 87, 87, 0.03)",

@@ -374,7 +374,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  headerTitle: { color: "#FFFFFF", fontSize: 18, fontWeight: "700" },
+  headerTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontFamily: "Poppins-SemiBold",
+  },
 
   // ট্যাব স্টাইল
   tabContainer: {
@@ -394,7 +398,11 @@ const styles = StyleSheet.create({
   },
   activeExpenseTab: { backgroundColor: "#EB5757" },
   activeIncomeTab: { backgroundColor: "#34C759" },
-  tabText: { color: "rgba(255,255,255,0.4)", fontSize: 14, fontWeight: "600" },
+  tabText: {
+    color: "rgba(255,255,255,0.4)",
+    fontSize: 14,
+    fontFamily: "Poppins-Medium",
+  },
   activeText: { color: "#FFFFFF" },
 
   // ইনপুট বক্স সমূহ
@@ -402,7 +410,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     color: "rgba(255,255,255,0.4)",
     fontSize: 12,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
     marginBottom: 10,
     letterSpacing: 0.5,
     textTransform: "uppercase",
@@ -420,10 +428,15 @@ const styles = StyleSheet.create({
   currencySymbol: {
     color: "#FFFFFF",
     fontSize: 22,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     marginRight: 6,
   },
-  amountInput: { flex: 1, color: "#FFFFFF", fontSize: 24, fontWeight: "700" },
+  amountInput: {
+    flex: 1,
+    color: "#FFFFFF",
+    fontSize: 24,
+    fontFamily: "Poppins-SemiBold",
+  },
 
   // ড্রপডাউন স্টাইল
   dropdownButton: {
@@ -447,7 +460,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: 12,
   },
-  dropdownText: { color: "#FFFFFF", fontSize: 15, fontWeight: "600" },
+  dropdownText: {
+    color: "#FFFFFF",
+    fontSize: 15,
+    fontFamily: "Poppins-Medium",
+  },
 
   noteInputBox: {
     flexDirection: "row",
@@ -463,7 +480,7 @@ const styles = StyleSheet.create({
     flex: 1,
     color: "#FFFFFF",
     fontSize: 15,
-    fontWeight: "500",
+    fontFamily: "Poppins-Regular",
     paddingVertical: 10,
   },
 
@@ -476,7 +493,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 15,
   },
-  submitButtonText: { color: "#FFFFFF", fontSize: 16, fontWeight: "700" },
+  submitButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontFamily: "Poppins-SemiBold",
+  },
 
   // 🎯 মডাল স্টাইলস
   modalOverlay: {
@@ -498,7 +519,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 20,
   },
-  modalTitle: { color: "#FFFFFF", fontSize: 18, fontWeight: "700" },
+  modalTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontFamily: "Poppins-SemiBold",
+  },
 
   searchBarBox: {
     flexDirection: "row",
@@ -524,7 +549,11 @@ const styles = StyleSheet.create({
   },
   activeCategoryItem: { backgroundColor: "rgba(47, 128, 237, 0.08)" },
   categoryListLeft: { flexDirection: "row", alignItems: "center" },
-  categoryListText: { color: "#FFFFFF", fontSize: 15, fontWeight: "600" },
+  categoryListText: {
+    color: "#FFFFFF",
+    fontSize: 15,
+    fontFamily: "Poppins-Medium",
+  },
   noDataText: {
     color: "rgba(255,255,255,0.3)",
     fontSize: 14,

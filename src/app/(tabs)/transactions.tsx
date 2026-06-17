@@ -381,7 +381,11 @@ export default function AllTransactions() {
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 16 },
   headerRow: { paddingVertical: 16, alignItems: "center" },
-  headerTitle: { color: "#FFFFFF", fontSize: 18, fontWeight: "700" },
+  headerTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontFamily: "Poppins-SemiBold",
+  },
   tabContainer: {
     flexDirection: "row",
     backgroundColor: "rgba(255, 255, 255, 0.04)",
@@ -398,9 +402,9 @@ const styles = StyleSheet.create({
   activeAllTab: { backgroundColor: "rgba(255, 255, 255, 0.12)" },
   activeExpenseTab: { backgroundColor: "#EB5757" },
   activeIncomeTab: { backgroundColor: "#34C759" },
-  tabText: { color: "#D1D5DB", fontSize: 14, fontWeight: "600" },
-  activeTabText: { color: "#FFFFFF", fontWeight: "700" },
-  activeIncomeText: { color: "#06110A", fontWeight: "700" },
+  tabText: { color: "#D1D5DB", fontSize: 14, fontFamily: "Poppins-SemiBold" },
+  activeTabText: { color: "#FFFFFF", fontFamily: "Poppins-SemiBold" },
+  activeIncomeText: { color: "#06110A", fontFamily: "Poppins-SemiBold" },
   filterRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -419,11 +423,16 @@ const styles = StyleSheet.create({
     width: "48.5%",
   },
   filterContent: { flexDirection: "row", alignItems: "center", flex: 1 },
-  filterText: { color: "#FFFFFF", fontSize: 13, fontWeight: "600", flex: 1 },
+  filterText: {
+    color: "#FFFFFF",
+    fontSize: 13,
+    fontFamily: "Poppins-SemiBold",
+    flex: 1,
+  },
   sectionLabel: {
     color: "rgba(255, 255, 255, 0.4)",
     fontSize: 12,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     textTransform: "uppercase",
     marginBottom: 12,
     letterSpacing: 0.5,
@@ -466,7 +475,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 16,
     textAlign: "center",
   },
@@ -485,7 +494,7 @@ const styles = StyleSheet.create({
     flex: 1,
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "500",
+    fontFamily: "Poppins-Regular",
   },
   listItem: {
     flexDirection: "row",
@@ -507,8 +516,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: 12,
   },
-  listText: { color: "#D1D5DB", fontSize: 14, fontWeight: "600" },
-  listTextActive: { color: "#34C759", fontWeight: "700" },
+  listText: { color: "#D1D5DB", fontSize: 14, fontFamily: "Poppins-Medium" },
+  listTextActive: { color: "#34C759", fontFamily: "Poppins-Medium" },
   noResultText: {
     color: "rgba(255,255,255,0.3)",
     fontSize: 13,
@@ -533,7 +542,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.06)",
     marginBottom: 16,
-    // হালকা গ্লো ইফেক্ট (iOS ও Android এর জন্য)
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -543,14 +551,14 @@ const styles = StyleSheet.create({
   emptyTitle: {
     color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 6,
     letterSpacing: 0.3,
   },
   emptySubtitle: {
     color: "rgba(255, 255, 255, 0.4)",
     fontSize: 13,
-    fontWeight: "400",
+    fontFamily: "Poppins-Regular",
     textAlign: "center",
     lineHeight: 18,
   },

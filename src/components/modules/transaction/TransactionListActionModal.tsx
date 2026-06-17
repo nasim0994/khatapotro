@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: "Poppins-SemiBold",
     marginBottom: 20,
     textAlign: "center",
     opacity: 0.8,
@@ -203,6 +203,6 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: 15,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
   },
 });

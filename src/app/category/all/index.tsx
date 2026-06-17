@@ -128,7 +128,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 16,
   },
-  headerTitle: { color: "#FFFFFF", fontSize: 18, fontWeight: "700" },
+  headerTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontFamily: "Poppins-SemiBold",
+  },
   typeSelectorContainer: {
     flexDirection: "row",
     backgroundColor: "rgba(255, 255, 255, 0.04)",
@@ -144,9 +148,9 @@ const styles = StyleSheet.create({
   },
   activeExpenseTab: { backgroundColor: "#EB5757" },
   activeIncomeTab: { backgroundColor: "#2F80ED" },
-  typeTabText: { color: "#D1D5DB", fontSize: 14, fontWeight: "600" },
-  activeTypeText: { color: "#FFFFFF", fontWeight: "700" },
-  activeIncomeText: { color: "#06110A", fontWeight: "700" },
+  typeTabText: { color: "#D1D5DB", fontSize: 14, fontFamily: "Poppins-Medium" },
+  activeTypeText: { color: "#FFFFFF", fontFamily: "Poppins-SemiBold" },
+  activeIncomeText: { color: "#06110A", fontFamily: "Poppins-SemiBold" },
   scrollGrid: { flexDirection: "row", flexWrap: "wrap", paddingBottom: 30 },
   categoryCard: {
     width: "22.5%",
@@ -176,7 +180,7 @@ const styles = StyleSheet.create({
   categoryName: {
     color: "#D1D5DB",
     fontSize: 10,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
     textAlign: "center",
     paddingHorizontal: 2,
   },
@@ -212,11 +216,15 @@ const styles = StyleSheet.create({
   modalLabel: {
     color: "rgba(255,255,255,0.35)",
     fontSize: 10,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     textTransform: "uppercase",
     marginBottom: 4,
   },
-  modalSelectedTitle: { color: "#FFFFFF", fontSize: 14, fontWeight: "800" },
+  modalSelectedTitle: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontFamily: "Poppins-Bold",
+  },
   closeButton: {
     width: 36,
     height: 36,
@@ -234,7 +242,7 @@ const styles = StyleSheet.create({
   amountTextInput: {
     color: "#FFFFFF",
     fontSize: 42,
-    fontWeight: "800",
+    fontFamily: "Poppins-Bold",
     minWidth: 130,
     paddingVertical: 8,
     textAlign: "center",
@@ -252,7 +260,11 @@ const styles = StyleSheet.create({
   inputRow: { flexDirection: "row", alignItems: "center" },
   fieldInputText: { color: "#FFFFFF", flex: 1 },
 
-  datePickerTriggerText: { color: "#FFFFFF", fontSize: 15, fontWeight: "500" },
+  datePickerTriggerText: {
+    color: "#FFFFFF",
+    fontSize: 15,
+    fontFamily: "Poppins-Regilar",
+  },
   pickerWrapper: {
     marginTop: 10,
     borderRadius: 14,

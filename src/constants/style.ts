@@ -1,8 +1,19 @@
-import { Dimensions, StyleSheet } from "react-native";
-
-const SCREEN_WIDTH = Dimensions.get("window").width;
+import { StyleSheet } from "react-native";
 
 export const commonStyles = StyleSheet.create({
+  fontRegular: {
+    fontFamily: "Poppins-Regular",
+  },
+  fontMedium: {
+    fontFamily: "Poppins-Medium",
+  },
+  fontSemiBold: {
+    fontFamily: "Poppins-SemiBold",
+  },
+  fontBold: {
+    fontFamily: "Poppins-Bold",
+  },
+
   primaryButton: {
     width: "full" as any,
     backgroundColor: "#2F80ED",
@@ -20,8 +31,8 @@ export const commonStyles = StyleSheet.create({
   primaryButtonText: {
     color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: "700",
     textAlign: "center",
+    fontFamily: "Poppins-SemiBold",
   },
 
   inputField: {
@@ -41,5 +52,24 @@ export const commonStyles = StyleSheet.create({
     backgroundColor: "#0D1117",
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  inputFieldBox: {
+    backgroundColor: "rgba(255, 255, 255, 0.04)",
+    borderRadius: 14,
+    paddingHorizontal: 13,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.07)",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+
+  fieldInputText: {
+    color: "#FFFFFF",
+    flex: 1,
+    fontFamily: "Poppins-Regular",
+    marginTop: 2,
   },
 });

@@ -231,7 +231,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
   },
-  headerTitle: { color: "#FFFFFF", fontSize: 18, fontWeight: "700" },
+  headerTitle: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontFamily: "Poppins-SemiBold",
+  },
 
   previewSection: { alignItems: "center", marginVertical: 24 },
   previewIconBox: {
@@ -244,12 +248,16 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.05)",
     marginBottom: 12,
   },
-  previewText: { color: "#FFFFFF", fontSize: 18, fontWeight: "700" },
+  previewText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontFamily: "Poppins-SemiBold",
+  },
 
   inputLabel: {
     color: "rgba(255,255,255,0.4)",
     fontSize: 12,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
     marginBottom: 10,
     letterSpacing: 0.5,
     textTransform: "uppercase",
@@ -264,7 +272,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
   },
-  textInput: { flex: 1, color: "#FFFFFF", fontSize: 15, fontWeight: "500" },
+  textInput: {
+    flex: 1,
+    color: "#FFFFFF",
+    fontSize: 15,
+    fontFamily: "Poppins-Medium",
+  },
 
   gridContainer: {
     flexDirection: "row",
@@ -293,5 +306,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  submitButtonText: { color: "#FFFFFF", fontSize: 16, fontWeight: "700" },
+  submitButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontFamily: "Poppins-SemiBold",
+  },
 });

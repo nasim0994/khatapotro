@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   categoryName: {
     color: "#D1D5DB",
     fontSize: 10,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
     textAlign: "center",
     paddingHorizontal: 2,
   },

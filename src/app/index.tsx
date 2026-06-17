@@ -1,4 +1,5 @@
 import AppBackground from "@/components/AppBackground";
+import { commonStyles } from "@/constants/style";
 import { useAppSelector } from "@/redux/hooks";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -36,13 +37,19 @@ export default function SplashScreen() {
     if (displayedText.startsWith("Khata")) {
       const rest = displayedText.substring(5);
       return (
-        <Text className="text-white text-2xl font-bold tracking-tight">
-          Khata<Text className="text-primary">{rest}</Text>
+        <Text
+          className="text-white text-2xl tracking-tight"
+          style={commonStyles.fontRegular}
+        >
+          Khata
+          <Text style={[commonStyles.fontRegular, { color: "#2F80ED" }]}>
+            {rest}
+          </Text>
         </Text>
       );
     }
     return (
-      <Text className="text-white text-2xl font-bold tracking-tight">
+      <Text className="text-white text-2xl tracking-tight">
         {displayedText}
       </Text>
     );
@@ -57,7 +64,10 @@ export default function SplashScreen() {
 
       {/* FOOTER */}
       <View className="items-center" style={{ marginBottom: 30 }}>
-        <Text className="text-[#828282] text-xs tracking-widest font-semibold uppercase">
+        <Text
+          className="text-[#828282] text-xs tracking-widest font-semibold uppercase"
+          style={commonStyles.fontMedium}
+        >
           by DevNasim
         </Text>
       </View>

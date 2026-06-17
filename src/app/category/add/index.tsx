@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: "#FFFFFF",
     fontSize: 18,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
   },
   typeSelectorContainer: {
     flexDirection: "row",
@@ -332,20 +332,20 @@ const styles = StyleSheet.create({
   typeTabText: {
     color: "#D1D5DB",
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
   },
   activeTypeText: {
     color: "#FFFFFF",
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
   },
   activeIncomeText: {
     color: "#06110A",
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
   },
   sectionLabel: {
     color: "rgba(255, 255, 255, 0.4)",
     fontSize: 12,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
     marginBottom: 16,
     paddingHorizontal: 4,
   },
@@ -416,14 +416,14 @@ const styles = StyleSheet.create({
   modalLabel: {
     color: "rgba(255,255,255,0.35)",
     fontSize: 10,
-    fontWeight: "700",
+    fontFamily: "Poppins-SemiBold",
     textTransform: "uppercase",
     marginBottom: 2,
   },
   modalSelectedTitle: {
     color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "800",
+    fontFamily: "Poppins-Bold",
   },
   closeButton: {
     width: 36,
@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
   fieldInputText: {
     color: "#FFFFFF",
     fontSize: 15,
-    fontWeight: "600",
+    fontFamily: "Poppins-Medium",
     flex: 1,
   },
   modalSaveButton: {
@@ -460,6 +460,6 @@ const styles = StyleSheet.create({
   },
   modalSaveButtonText: {
     fontSize: 15,
-    fontWeight: "800",
+    fontFamily: "Poppins-Bold",
   },
 });

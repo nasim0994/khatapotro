@@ -3,8 +3,20 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { Platform, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
+
+  const dynamicBottomSpace =
+    Platform.OS === "ios"
+      ? insets.bottom > 0
+        ? insets.bottom
+        : 20
+      : insets.bottom > 0
+        ? insets.bottom + 10
+        : 20;
+
   return (
     <ProtectedRoute>
       <View style={{ flex: 1, position: "relative" }}>
@@ -15,7 +27,7 @@ export default function TabLayout() {
             tabBarInactiveTintColor: "#828282",
             tabBarLabelStyle: {
               fontSize: 11,
-              fontWeight: "600",
+              fontFamily: "Poppins-Medium",
               marginTop: -2,
             },
 
@@ -24,7 +36,9 @@ export default function TabLayout() {
               left: 24,
               right: 24,
               height: 64,
-              bottom: Platform.OS === "ios" ? 28 : 20,
+
+              bottom: dynamicBottomSpace,
+
               backgroundColor: "rgba(22, 27, 38, 0.95)",
               borderRadius: 32,
               borderWidth: 1,
