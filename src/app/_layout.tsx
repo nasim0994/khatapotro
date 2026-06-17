@@ -10,7 +10,6 @@ import { useEffect } from "react";
 import Toast from "react-native-toast-message";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import "../../global.css";
 import { persistor, store } from "./../redux/store";
 
 export default function RootLayout() {

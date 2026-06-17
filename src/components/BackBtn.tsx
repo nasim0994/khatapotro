@@ -8,7 +8,17 @@ export default function BackBtn() {
   return (
     <TouchableOpacity
       onPress={() => router.back()}
-      className="w-10 h-10 bg-white/5 border border-white/10 rounded-xl justify-center items-center mt-2"
+      style={{
+        width: 40,
+        height: 40,
+        backgroundColor: "rgba(255, 255, 255, 0.05)",
+        borderWidth: 1,
+        borderColor: "rgba(255, 255, 255, 0.1)",
+        borderRadius: 12,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 8,
+      }}
       activeOpacity={0.7}
     >
       <Feather name="chevron-left" size={20} color="#FFFFFF" />

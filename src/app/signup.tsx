@@ -108,25 +108,26 @@ export default function SignupScreen() {
         <View>
           <BackBtn />
 
-          {/* TYPOGRAPHY SECTION */}
           <View style={{ marginTop: 30 }}>
             <Text
-              className="text-white text-[32px]  tracking-tight"
-              style={[commonStyles.fontMedium]}
+              style={[
+                commonStyles.fontMedium,
+                { color: "#FFFFFF", fontSize: 32, letterSpacing: -0.5 },
+              ]}
             >
               Create Account
             </Text>
             <Text
-              className="text-gray-300 text-sm"
-              style={[commonStyles.fontRegular]}
+              style={[
+                commonStyles.fontRegular,
+                { color: "#D1D5DB", fontSize: 14 },
+              ]}
             >
               Sign up to get started with your financial journey
             </Text>
           </View>
 
-          {/* FORM INPUTS SECTION */}
           <View style={{ marginTop: 30, gap: 14 }}>
-            {/* Name INPUT */}
             <View style={[commonStyles.inputFieldBox]}>
               <Feather name="user" size={18} color="#ccc" />
               <TextInput
@@ -140,7 +141,6 @@ export default function SignupScreen() {
               />
             </View>
 
-            {/* EMAIL INPUT */}
             <View style={[commonStyles.inputFieldBox]}>
               <Feather name="at-sign" size={18} color="#828282" />
               <TextInput
@@ -154,7 +154,6 @@ export default function SignupScreen() {
               />
             </View>
 
-            {/* PASSWORD INPUT */}
             <View style={[commonStyles.inputFieldBox]}>
               <Feather name="lock" size={18} color="#828282" />
               <TextInput
@@ -175,7 +174,6 @@ export default function SignupScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* PASSWORD INPUT */}
             <View style={[commonStyles.inputFieldBox]}>
               <Feather name="lock" size={18} color="#ccc" />
               <TextInput
@@ -202,17 +200,27 @@ export default function SignupScreen() {
               </TouchableOpacity>
             </View>
 
-            <View className="flex-row justify-center items-center">
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <Text
-                className="text-gray-300 text-sm"
-                style={[commonStyles.fontRegular]}
+                style={[
+                  commonStyles.fontRegular,
+                  { color: "#D1D5DB", fontSize: 14 },
+                ]}
               >
                 Already have an account?{" "}
               </Text>
               <Link href="/login">
                 <Text
-                  className="text-primary text-sm"
-                  style={[commonStyles.fontRegular]}
+                  style={[
+                    commonStyles.fontRegular,
+                    { color: "#2F80ED", fontSize: 14 },
+                  ]}
                 >
                   Sign in
                 </Text>

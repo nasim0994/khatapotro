@@ -38,8 +38,12 @@ export default function SplashScreen() {
       const rest = displayedText.substring(5);
       return (
         <Text
-          className="text-white text-2xl tracking-tight"
-          style={commonStyles.fontRegular}
+          style={{
+            color: "white",
+            fontSize: 28,
+            letterSpacing: -0.5,
+            ...commonStyles.fontRegular,
+          }}
         >
           Khata
           <Text style={[commonStyles.fontRegular, { color: "#2F80ED" }]}>
@@ -49,7 +53,13 @@ export default function SplashScreen() {
       );
     }
     return (
-      <Text className="text-white text-2xl tracking-tight">
+      <Text
+        style={{
+          color: "white",
+          fontSize: 28,
+          letterSpacing: -0.5,
+        }}
+      >
         {displayedText}
       </Text>
     );
@@ -58,15 +68,23 @@ export default function SplashScreen() {
   return (
     <AppBackground>
       {/* CENTER BRAND LOGO WITH TYPEWRITER EFFECT */}
-      <View className="flex-1 items-center justify-center">
-        <View className="h-12 justify-center">{renderAnimatedText()}</View>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <View style={{ height: 48, justifyContent: "center" }}>
+          {renderAnimatedText()}
+        </View>
       </View>
 
       {/* FOOTER */}
-      <View className="items-center" style={{ marginBottom: 30 }}>
+      <View style={{ alignItems: "center", marginBottom: 30 }}>
         <Text
-          className="text-[#828282] text-xs tracking-widest font-semibold uppercase"
-          style={commonStyles.fontMedium}
+          style={{
+            color: "#828282",
+            fontSize: 12,
+            letterSpacing: 1,
+            fontWeight: "600",
+            textTransform: "uppercase",
+            ...commonStyles.fontMedium,
+          }}
         >
           by DevNasim
         </Text>

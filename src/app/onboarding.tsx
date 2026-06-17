@@ -9,23 +9,44 @@ export default function OnboardingScreen() {
 
   return (
     <AppBackground>
-      <SafeAreaView className="flex-1">
-        <View className="flex-1 px-6 justify-between">
-          <View className="flex-row items-center justify-between mt-4">
+      <SafeAreaView style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: 24,
+            justifyContent: "space-between",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginTop: 16,
+            }}
+          >
             <Text
-              className="text-white text-2xl tracking-tight"
-              style={commonStyles.fontRegular}
+              style={{
+                color: "white",
+                fontSize: 28,
+                letterSpacing: -0.5,
+                ...commonStyles.fontRegular,
+              }}
             >
               Khata
-              <Text className="text-primary" style={commonStyles.fontRegular}>
+              <Text style={{ color: "#2F80ED", ...commonStyles.fontRegular }}>
                 Potro.
               </Text>
             </Text>
 
             <Link href="/signup">
               <Text
-                className="text-white text-base font-semibold"
-                style={commonStyles.fontRegular}
+                style={{
+                  color: "white",
+                  fontSize: 16,
+                  fontWeight: "600",
+                  ...commonStyles.fontRegular,
+                }}
               >
                 Sign up
               </Text>
@@ -35,24 +56,29 @@ export default function OnboardingScreen() {
           <View>
             <Image
               source={require("@/assets/images/onboard_icon.webp")}
-              className="w-full"
               resizeMode="cover"
               style={{
                 flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
+                width: "100%",
               }}
             />
           </View>
 
           {/* TYPOGRAPHY & COPY SECTION */}
-          <View className="space-y-4 mb-4">
+          <View style={{ gap: 16, marginBottom: 16 }}>
             <Text
-              className="text-white text-[40px] leading-[46px] tracking-tight"
-              style={commonStyles.fontRegular}
+              style={{
+                color: "white",
+                fontSize: 40,
+                lineHeight: 46,
+                letterSpacing: -0.5,
+                ...commonStyles.fontRegular,
+              }}
             >
               Your Digital{"\n"}
-              <Text className="text-primary" style={commonStyles.fontRegular}>
+              <Text style={{ color: "#2F80ED", ...commonStyles.fontRegular }}>
                 Financial
               </Text>
               {"\n"}
@@ -60,8 +86,13 @@ export default function OnboardingScreen() {
             </Text>
 
             <Text
-              className="text-[#828282] text-base leading-6 mt-3"
-              style={commonStyles.fontRegular}
+              style={{
+                color: "#828282",
+                fontSize: 16,
+                lineHeight: 24,
+                marginTop: 12,
+                ...commonStyles.fontRegular,
+              }}
             >
               Effortlessly track expenses, manage customized SaaS multi-ledgers,
               and control budgets under a secure, lightning-fast dashboard.
@@ -69,7 +100,7 @@ export default function OnboardingScreen() {
           </View>
 
           {/* GET STARTED BUTTON */}
-          <View className="mb-8">
+          <View style={{ marginBottom: 32 }}>
             <TouchableOpacity
               activeOpacity={0.85}
               style={commonStyles.primaryButton}

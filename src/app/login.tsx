@@ -78,21 +78,36 @@ export default function LoginScreen() {
 
   return (
     <AppBackground>
-      <SafeAreaView className="flex-1 px-6 justify-between pt-4">
+      <SafeAreaView
+        style={{
+          flex: 1,
+          paddingHorizontal: 24,
+          justifyContent: "space-between",
+          paddingTop: 16,
+        }}
+      >
         <View>
           <BackBtn />
 
           {/* TYPOGRAPHY SECTION */}
-          <View className="mt-8 space-y-2">
+          <View style={{ marginTop: 32, gap: 8 }}>
             <Text
-              className="text-white text-[32px]  tracking-tight"
-              style={commonStyles.fontMedium}
+              style={{
+                color: "white",
+                fontSize: 32,
+                letterSpacing: -0.5,
+                ...commonStyles.fontMedium,
+              }}
             >
               Welcome Back
             </Text>
             <Text
-              className="text-gray-300 text-sm mt-1"
-              style={commonStyles.fontRegular}
+              style={{
+                color: "#CCCCCC",
+                fontSize: 14,
+                marginTop: 4,
+                ...commonStyles.fontRegular,
+              }}
             >
               Log in to your account to monitor your expenses
             </Text>
@@ -141,8 +156,12 @@ export default function LoginScreen() {
               {/* FORGOT PASSWORD */}
               <Link href="/forgot-password" style={{ marginTop: 8 }}>
                 <Text
-                  className="text-primary text-right text-xs"
-                  style={[commonStyles.fontMedium]}
+                  style={{
+                    color: "#2F80ED",
+                    textAlign: "right",
+                    fontSize: 12,
+                    ...commonStyles.fontMedium,
+                  }}
                 >
                   Forgot Password?
                 </Text>
@@ -163,17 +182,29 @@ export default function LoginScreen() {
               </TouchableOpacity>
             </View>
 
-            <View className="flex-row justify-center items-center">
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <Text
-                className="text-gray-300 text-sm"
-                style={[commonStyles.fontRegular]}
+                style={{
+                  color: "#CCCCCC",
+                  fontSize: 14,
+                  ...commonStyles.fontRegular,
+                }}
               >
                 Don't have an account?{" "}
               </Text>
               <Link href="/signup">
                 <Text
-                  className="text-primary text-sm"
-                  style={[commonStyles.fontRegular]}
+                  style={{
+                    color: "#2F80ED",
+                    fontSize: 14,
+                    ...commonStyles.fontRegular,
+                  }}
                 >
                   Sign Up
                 </Text>

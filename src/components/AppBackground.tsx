@@ -8,7 +8,7 @@ interface AppBackgroundProps {
 
 export default function AppBackground({ children }: AppBackgroundProps) {
   return (
-    <View className="bg-secondary flex-1">
+    <View style={{ backgroundColor: "#05070D", flex: 1 }}>
       <LinearGradient
         colors={["#253E73", "#0E2E6B", "#081328", "#05070D"]}
         locations={[0, 0.22, 0.58, 1]}

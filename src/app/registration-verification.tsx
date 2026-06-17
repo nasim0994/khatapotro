@@ -144,7 +144,7 @@ export default function RegistrationVerification() {
             <Feather
               name="info"
               size={16}
-              color="#34C759"
+              color="#2F80ED"
               style={{ marginTop: 2 }}
             />
             <Text style={styles.alertText}>
