@@ -55,14 +55,8 @@ export default function OnboardingScreen() {
 
           <View>
             <Image
-              source={require("@/assets/images/onboard_icon.webp")}
+              source={require("../../assets/images/onboard_icon.png")}
               resizeMode="cover"
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-              }}
             />
           </View>
 
