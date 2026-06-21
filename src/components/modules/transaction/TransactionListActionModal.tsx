@@ -1,4 +1,5 @@
 import { useDeleteTransactionMutation } from "@/redux/features/transactionApi";
+import { useSuccessSound } from "@/utils/useSuccessSound";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import {
@@ -28,6 +29,7 @@ export default function TransactionListActionModal({
   >;
 }) {
   const router = useRouter();
+  const { playSuccessSound } = useSuccessSound();
   const closeMenu = () => {
     setMenuVisible(false);
     setSelectedItem(null);
@@ -51,6 +53,7 @@ export default function TransactionListActionModal({
               const id = transaction?._id;
               const res = await deleteTransaction(id).unwrap();
               if (res?.success) {
+                playSuccessSound();
                 Toast.show({
                   type: "success",
                   text2: res?.message,

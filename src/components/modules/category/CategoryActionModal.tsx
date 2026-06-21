@@ -1,5 +1,6 @@
 import { useDeleteCategoryMutation } from "@/redux/features/categoryApi";
 import { TCategory } from "@/types/categoryTypes";
+import { useSuccessSound } from "@/utils/useSuccessSound";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import {
@@ -23,6 +24,7 @@ export default function CategoryActionModal({
   setIsActionModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const router = useRouter();
+  const { playSuccessSound } = useSuccessSound();
   const [deleteCategory] = useDeleteCategoryMutation();
   const handleDelete = async (category: { _id: string; name: string }) => {
     Alert.alert(
@@ -41,6 +43,7 @@ export default function CategoryActionModal({
               const id = category?._id;
               const res = await deleteCategory(id).unwrap();
               if (res?.success) {
+                playSuccessSound();
                 Toast.show({
                   type: "success",
                   text2: res?.message,
