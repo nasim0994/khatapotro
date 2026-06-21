@@ -2,7 +2,7 @@
   "expo": {
     "name": "KhataPotro",
     "slug": "KhataPotro",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/favicon.png",
     "scheme": "khatapotro",
@@ -24,12 +24,7 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      "expo-font",
-      "expo-audio",
-      "expo-asset"
-    ],
+    "plugins": ["expo-router", "expo-font", "expo-audio", "expo-asset"],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
