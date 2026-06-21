@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="addb4f07-6a82-43b7-9966-c50f3aa75d21" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/assets/images/onboard_icon.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/onboard.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/onboarding.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/onboarding.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
