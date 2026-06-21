@@ -55,7 +55,7 @@ export default function OnboardingScreen() {
 
           <View>
             <Image
-              source={require("../../assets/images/onboard_icon.png")}
+              source={require("@/assets/images/onboard_icon.png")}
               resizeMode="cover"
             />
           </View>
